@@ -2,6 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tencent.wxcloudrun.dao.PublicMapper">
 
+    <resultMap id="mapResult" type="com.tencent.wxcloudrun.model.EmployeeManage">
+        <id column="id" property="id" />
+        <id column="face_url" property="faceUrl" />
+        <id column="name" property="name" />
+        <id column="id_card" property="idCard" />
+        <id column="phone" property="phone" />
+        <id column="address" property="address" />
+        <id column="is_manager" property="isManager" />
+        <id column="is_work" property="isWork" />
+        <id column="is_insured" property="isInsured" />
+        <id column="status" property="status" />
+        <id column="create_time" property="createTime" />
+    </resultMap>
+
     <select id="getEmployeeById" parameterType="java.lang.Integer" resultType="com.tencent.wxcloudrun.dto.EmployeeVO">
         select id, face_url, name, id_card, phone, address from employee_manage where id = #{id}
     </select>
