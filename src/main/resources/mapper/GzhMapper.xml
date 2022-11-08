@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tencent.wxcloudrun.dao.GzhMapper">
+
+    <select id="getProvince" resultType="com.tencent.wxcloudrun.model.Province">
+        SELECT * FROM province
+    </select>
+
+    <select id="getCityByPid" parameterType="java.lang.Integer" resultType="com.tencent.wxcloudrun.model.City">
+        SELECT * FROM city WHERE pid = #{pid}
+    </select>
+
+    <select id="getAreaByPid" parameterType="java.lang.Integer" resultType="com.tencent.wxcloudrun.model.Area">
+        SELECT * FROM area WHERE pid = #{pid}
+    </select>
+</mapper>

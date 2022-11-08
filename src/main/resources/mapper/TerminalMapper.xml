@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tencent.wxcloudrun.dao.TerminalMapper">
+
+    <insert id="addEmployeeFace">
+        INSERT INTO employee_manage (face_id, face_url) VALUES (#{faceId}, #{faceUrl})
+    </insert>
+
+    <select id="getEmployeeByFaceId" parameterType="java.lang.Integer" resultType="com.tencent.wxcloudrun.model.EmployeeManage">
+        SELECT * FROM employee_manage WHERE face_id = #{faceId}
+    </select>
+
+    <update id="updateEmployeeManage" parameterType="com.tencent.wxcloudrun.model.EmployeeManage">
+        UPDATE employee_manage
+        SET face_url = #{faceUrl},
+            name = #{name},
+            id_card = #{idCard},
+            phone = #{phone}
+        WHERE face_id = #{faceId}
+    </update>
+</mapper>
