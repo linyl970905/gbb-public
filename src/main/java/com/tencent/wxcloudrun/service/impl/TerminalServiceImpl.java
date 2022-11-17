@@ -48,7 +48,7 @@ public class TerminalServiceImpl implements TerminalService {
     public ApiResponse operaPunch(String snCode, String faceUrl) throws Exception {
         // 0.根据sn码查询设备信息、商户信息
         DeviceManage device = terminalMapper.getDeviceBySnCode(snCode);
-        MerchantManage merchant = terminalMapper.getMerchantById(device.getMerchantId());
+        MerchantManage merchant = terminalMapper.getMerchantByCloudId(device.getCloudId());
 
         // 1.使用终端人脸照与百度人脸库数据进行对比，返回比对值score
         String response = faceVerifyService.searchFace(faceUrl);

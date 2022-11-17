@@ -6,8 +6,8 @@
         SELECT * FROM device_manage WHERE is_delete = 0 AND sn_code = #{snCode}
     </select>
 
-    <select id="getMerchantById" parameterType="java.lang.Integer" resultType="com.tencent.wxcloudrun.model.MerchantManage">
-        SELECT * FROM merchant_manage WHERE merchant_id = #{id}
+    <select id="getMerchantByCloudId" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.MerchantManage">
+        SELECT * FROM merchant_manage WHERE cloud_id = #{cloudId}
     </select>
 
     <select id="getEmployeeByFaceId" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.EmployeeManage">

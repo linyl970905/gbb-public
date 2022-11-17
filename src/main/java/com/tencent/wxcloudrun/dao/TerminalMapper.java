@@ -14,7 +14,7 @@ public interface TerminalMapper {
 
     DeviceManage getDeviceBySnCode(String snCode);
 
-    MerchantManage getMerchantById(Integer id);
+    MerchantManage getMerchantByCloudId(String cloudId);
 
     EmployeeManage getEmployeeByFaceId(String faceId);
 

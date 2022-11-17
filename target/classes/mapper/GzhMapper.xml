@@ -2,6 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tencent.wxcloudrun.dao.GzhMapper">
 
+    <select id="getMerchantByCloudId" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.MerchantManage">
+        SELECT * FROM merchant_manage WHERE cloud_id = #{cloudId}
+    </select>
+
+    <insert id="addMerchantManage" parameterType="java.lang.String">
+        INSERT INTO merchant_manage (cloud_id) VALUES (#{cloudId})
+    </insert>
+
     <select id="getProvince" resultType="com.tencent.wxcloudrun.model.Province">
         SELECT * FROM province
     </select>
@@ -15,7 +23,17 @@
     </select>
 
     <insert id="createOrder" parameterType="com.tencent.wxcloudrun.model.Order">
-        INSERT INTO order(mer_id, name, spec, price, buy_num, order_no, order_price, promotion_code, create_time)
-        VALUES(#{merId}, #{name}, #{spec}, #{price}, #{buyNum}, #{orderNo}, #{orderPrice}, #{promotionCode}, NOW())
+        INSERT INTO order(cloud_id, name, spec, price, buy_num, order_no, order_price, promotion_code, create_time)
+        VALUES(#{cloudId}, #{name}, #{spec}, #{price}, #{buyNum}, #{orderNo}, #{orderPrice}, #{promotionCode}, NOW())
     </insert>
+
+    <select id="getEmployeeList" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.EmployeeManage">
+        SELECT
+            em.*
+        FROM
+            employee_manage em
+        LEFT JOIN device_employee_relation der ON der.employee_id = em.id
+        LEFT JOIN device_manage dm ON dm.id = der.device_id
+        WHERE dm.cloud_id = #{cloudId}
+    </select>
 </mapper>
