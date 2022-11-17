@@ -1,6 +1,7 @@
 package com.tencent.wxcloudrun.model;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -10,6 +11,7 @@ import java.io.Serializable;
  * @Motto: Nothing is impossible
  */
 @Data
+@Accessors(chain = true)
 public class City implements Serializable {
 
     // 主键id

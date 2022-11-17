@@ -28,4 +28,8 @@ public final class ApiResponse {
   public static ApiResponse error(String errorMsg) {
     return new ApiResponse(0, errorMsg, new HashMap<>());
   }
+
+  public static ApiResponse responseData(int code, String errorMsg, Object data) {
+    return new ApiResponse(code, errorMsg, data);
+  }
 }

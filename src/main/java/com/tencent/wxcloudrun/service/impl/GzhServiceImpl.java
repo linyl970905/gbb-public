@@ -1,19 +1,15 @@
 package com.tencent.wxcloudrun.service.impl;
 
-import cn.hutool.json.JSONUtil;
 import com.tencent.wxcloudrun.config.ApiResponse;
 import com.tencent.wxcloudrun.dao.GzhMapper;
-import com.tencent.wxcloudrun.model.Area;
-import com.tencent.wxcloudrun.model.City;
-import com.tencent.wxcloudrun.model.Province;
+import com.tencent.wxcloudrun.model.*;
 import com.tencent.wxcloudrun.service.GzhService;
-import com.tencent.wxcloudrun.utils.HttpUtils;
+import com.tencent.wxcloudrun.utils.OrderNoType;
 import com.tencent.wxcloudrun.vo.CityAreaList;
 import com.tencent.wxcloudrun.vo.ProvinceCityList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,31 +25,14 @@ public class GzhServiceImpl implements GzhService {
     private GzhMapper gzhMapper;
 
     @Override
-    public ApiResponse gzhAuthorizedLogin(String code) throws IOException {
-        // 雇保宝公众号参数
-        String appId = "";
-        String appSecret = "";
-
-        // 用户选择授权登录，前端自动获取code传给后台，后台通过code换取网页授权access_token
-        if (null == code) {
-            return ApiResponse.error("公众号免授权登录：code异常！");
-        } else {
-            String requestUrl = "https://api.weixin.qq.com/sns/oauth2/access_token";
-
-            String requestParams = "appid=" + appId + "&secret=" + appSecret
-                    + "&code=" + code + "&grant_type=authorization_code";
-
-            String result = HttpUtils.sendGet(requestUrl, requestParams);
-
-            cn.hutool.json.JSONObject headJson = JSONUtil.parseObj(result);
-            String openid = headJson.getStr("openid");
-
-            if (openid == null) {
-                return ApiResponse.error("公众号免授权登录：获取openid异常！");
-            }
-
-            return ApiResponse.ok(openid);
+    public ApiResponse registerLogin(String cloudId) {
+        // 1.根据cloudId判断是否存在该用户
+        MerchantManage merchant = gzhMapper.getMerchantByCloudId(cloudId);
+        if (merchant == null) {
+            // 2.不存在时--执行新增操作
+            gzhMapper.addMerchantManage(cloudId);
         }
+        return ApiResponse.ok();
     }
 
     @Override
@@ -91,5 +70,21 @@ public class GzhServiceImpl implements GzhService {
         }
 
         return allArea;
+    }
+
+    @Override
+    public ApiResponse createOrder(Order order) {
+        order.setOrderNo(OrderNoType.getOrderNoType("GBB-D", 2));
+        Integer result = gzhMapper.createOrder(order);
+        if (result > 0) {
+            return ApiResponse.ok();
+        } else {
+            return ApiResponse.error("提示：创建订单异常！");
+        }
+    }
+
+    @Override
+    public List<EmployeeManage> getEmployeeList(String cloudId) {
+        return gzhMapper.getEmployeeList(cloudId);
     }
 }

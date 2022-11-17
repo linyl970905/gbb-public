@@ -1,5 +1,6 @@
 package com.tencent.wxcloudrun.service;
 
+import com.tencent.wxcloudrun.config.ApiResponse;
 import com.tencent.wxcloudrun.model.EmployeeManage;
 
 /**
@@ -9,9 +10,11 @@ import com.tencent.wxcloudrun.model.EmployeeManage;
  */
 public interface TerminalService {
 
-    void addEmployeeFace(Integer faceId, String faceUrl);
+    ApiResponse getDeviceBySnCode(String snCode);
 
-    EmployeeManage getEmployeeByFaceId(Integer faceId);
+    ApiResponse operaPunch(String snCode, String faceUrl) throws Exception;
 
-    void addEmployeeManage(EmployeeManage manage);
+    EmployeeManage getEmployeeByFaceId(String faceId);
+
+    ApiResponse addEmployeeManage(EmployeeManage employee) throws Exception;
 }

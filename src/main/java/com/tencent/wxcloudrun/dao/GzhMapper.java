@@ -1,8 +1,6 @@
 package com.tencent.wxcloudrun.dao;
 
-import com.tencent.wxcloudrun.model.Area;
-import com.tencent.wxcloudrun.model.City;
-import com.tencent.wxcloudrun.model.Province;
+import com.tencent.wxcloudrun.model.*;
 
 import java.util.List;
 
@@ -13,9 +11,17 @@ import java.util.List;
  */
 public interface GzhMapper {
 
+    MerchantManage getMerchantByCloudId(String cloudId);
+
+    void addMerchantManage(String cloudId);
+
     List<Province> getProvince();
 
     List<City> getCityByPid(Integer pid);
 
     List<Area> getAreaByPid(Integer pid);
+
+    Integer createOrder(Order order);
+
+    List<EmployeeManage> getEmployeeList(String cloudId);
 }

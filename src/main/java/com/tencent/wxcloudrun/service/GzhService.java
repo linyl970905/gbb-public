@@ -1,9 +1,10 @@
 package com.tencent.wxcloudrun.service;
 
 import com.tencent.wxcloudrun.config.ApiResponse;
+import com.tencent.wxcloudrun.model.EmployeeManage;
+import com.tencent.wxcloudrun.model.Order;
 import com.tencent.wxcloudrun.vo.ProvinceCityList;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -13,7 +14,11 @@ import java.util.List;
  */
 public interface GzhService {
 
-    ApiResponse gzhAuthorizedLogin(String code) throws IOException;
+    ApiResponse registerLogin(String cloudId);
 
     List<ProvinceCityList> getAllArea();
+
+    ApiResponse createOrder(Order order);
+
+    List<EmployeeManage> getEmployeeList(String cloudId);
 }

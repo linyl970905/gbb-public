@@ -1,6 +1,8 @@
 package com.tencent.wxcloudrun.dao;
 
+import com.tencent.wxcloudrun.model.DeviceManage;
 import com.tencent.wxcloudrun.model.EmployeeManage;
+import com.tencent.wxcloudrun.model.MerchantManage;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -10,9 +12,15 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface TerminalMapper {
 
-    void addEmployeeFace(@Param("faceId") Integer faceId, @Param("faceUrl") String faceUrl);
+    DeviceManage getDeviceBySnCode(String snCode);
 
-    EmployeeManage getEmployeeByFaceId(Integer faceId);
+    MerchantManage getMerchantById(Integer id);
 
-    void updateEmployeeManage(EmployeeManage manage);
+    EmployeeManage getEmployeeByFaceId(String faceId);
+
+    Integer addEmployeeManage(EmployeeManage employee);
+
+    void addDeviceEmployee(@Param("deviceId") Integer deviceId, @Param("employeeId") Integer employeeId);
+
+    Integer updateEmployeeManage(EmployeeManage manage);
 }

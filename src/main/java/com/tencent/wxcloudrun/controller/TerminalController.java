@@ -21,15 +21,24 @@ public class TerminalController implements Serializable {
     private TerminalService terminalService;
 
     /**
-     * 终端扫码后保存人脸信息
-     * @param faceId
+     * 查询设备是否激活
+     * @param snCode
+     * @return
+     */
+    @GetMapping("/getDeviceBySnCode")
+    public ApiResponse getDeviceBySnCode(@RequestParam String snCode) {
+        return terminalService.getDeviceBySnCode(snCode);
+    }
+
+    /**
+     * 终端扫码后：打卡/登记
+     * @param snCode
      * @param faceUrl
      * @return
      */
-    @GetMapping("/addEmployeeFace")
-    public ApiResponse addEmployeeFace(@RequestParam Integer faceId, @RequestParam String faceUrl) {
-        terminalService.addEmployeeFace(faceId, faceUrl);
-        return ApiResponse.ok();
+    @GetMapping("/operaPunch")
+    public ApiResponse operaPunch(@RequestParam String snCode, @RequestParam String faceUrl) throws Exception {
+        return terminalService.operaPunch(snCode, faceUrl);
     }
 
     /**
@@ -38,7 +47,7 @@ public class TerminalController implements Serializable {
      * @return
      */
     @GetMapping("/getEmployeeByFaceId")
-    public ApiResponse getEmployeeByFaceId(@RequestParam Integer faceId) {
+    public ApiResponse getEmployeeByFaceId(@RequestParam String faceId) {
         return ApiResponse.ok(terminalService.getEmployeeByFaceId(faceId));
     }
 
@@ -48,8 +57,7 @@ public class TerminalController implements Serializable {
      * @return
      */
     @PostMapping("/addEmployeeManage")
-    public ApiResponse addEmployeeManage(@RequestBody EmployeeManage manage) {
-        terminalService.addEmployeeManage(manage);
-        return ApiResponse.ok();
+    public ApiResponse addEmployeeManage(@RequestBody EmployeeManage manage) throws Exception {
+        return terminalService.addEmployeeManage(manage);
     }
 }

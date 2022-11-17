@@ -1,14 +1,11 @@
 package com.tencent.wxcloudrun.controller;
 
 import com.tencent.wxcloudrun.config.ApiResponse;
+import com.tencent.wxcloudrun.model.Order;
 import com.tencent.wxcloudrun.service.GzhService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.io.Serializable;
 
 /**
@@ -24,14 +21,13 @@ public class GzhController implements Serializable {
     private GzhService gzhService;
 
     /**
-     * 公众号授权登录
-     * @param code
+     * 公众号注册/登录
+     * @param cloudId
      * @return
-     * @throws IOException
      */
-    @GetMapping("/gzhAuthorizedLogin")
-    public ApiResponse gzhAuthorizedLogin(@RequestParam String code) throws IOException {
-        return ApiResponse.ok(gzhService.gzhAuthorizedLogin(code));
+    @GetMapping("/registerLogin")
+    public ApiResponse registerLogin(@RequestParam String cloudId) {
+        return gzhService.registerLogin(cloudId);
     }
 
     /**
@@ -41,5 +37,25 @@ public class GzhController implements Serializable {
     @GetMapping("/getAllArea")
     public ApiResponse getAllArea() {
         return ApiResponse.ok(gzhService.getAllArea());
+    }
+
+    /**
+     * 公众号：购买考勤机
+     * @param order
+     * @return
+     */
+    @PostMapping("/createOrder")
+    public ApiResponse createOrder(@RequestBody Order order) {
+        return gzhService.createOrder(order);
+    }
+
+    /**
+     * 根据商户id查找雇员列表
+     * @param cloudId
+     * @return
+     */
+    @GetMapping("/getEmployeeList")
+    public ApiResponse getEmployeeList(@RequestParam String cloudId) {
+        return ApiResponse.ok(gzhService.getEmployeeList(cloudId));
     }
 }

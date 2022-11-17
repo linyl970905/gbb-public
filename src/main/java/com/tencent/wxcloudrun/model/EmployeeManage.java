@@ -18,8 +18,8 @@ public class EmployeeManage implements Serializable {
     // 主键id
     private Integer id;
 
-    // 脸部id
-    private Integer faceId;
+    // 小程序用户唯一标识
+    private String openId;
 
     // 脸部照片地址
     private String faceUrl;
@@ -35,6 +35,9 @@ public class EmployeeManage implements Serializable {
 
     // 联系地址
     private String address;
+
+    // 工种
+    private String jobCode;
 
     // 是否管理员 0-默认否 1-是
     private Integer isManager;
