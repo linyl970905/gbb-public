@@ -27,6 +27,26 @@
         VALUES(#{cloudId}, #{name}, #{spec}, #{price}, #{buyNum}, #{orderNo}, #{orderPrice}, #{promotionCode}, NOW())
     </insert>
 
+    <insert id="addDeviceManage" parameterType="com.tencent.wxcloudrun.model.DeviceManage">
+        INSERT INTO device_manage (cloud_id, sn_code, status)
+        VALUES (#{cloudId}, #{snCode}, 1)
+    </insert>
+
+    <select id="getDeviceNumByCloudId" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT count(1) FROM device_manage WHERE cloud_id = #{cloudId}
+    </select>
+
+    <select id="getEmployeeNumByMerId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT count(1) FROM mer_emp_relation WHERE mer_id = #{merId}
+    </select>
+
+    <update id="updateMerchantInfo" parameterType="com.tencent.wxcloudrun.model.MerchantManage">
+        UPDATE merchant_manage
+        SET name = #{name}, link_person = #{linkPerson}, link_phone = #{linkPhone}, address = #{address},
+            business_license = #{businessLicense}, place_image = #{placeImage}, face_score = #{faceScore}
+        WHERE cloud_id = #{cloudId}
+    </update>
+
     <select id="getEmployeeList" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.EmployeeManage">
         SELECT
             em.*
@@ -36,4 +56,28 @@
         LEFT JOIN device_manage dm ON dm.id = der.device_id
         WHERE dm.cloud_id = #{cloudId}
     </select>
+
+    <update id="closeEmpPunch">
+        UPDATE employee_manage set is_punch = #{isPunch} WHERE id = #{id}
+    </update>
+
+    <update id="closeEmpInsure">
+        UPDATE employee_manage set is_insure = #{isInsure} WHERE id = #{id}
+    </update>
+
+    <delete id="delMerEmpRelation">
+        DELETE * from mer_emp_relation WHERE mer_id = #{merId} AND emp_id = #{empId}
+    </delete>
+
+    <select id="getDeviceList" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.DeviceManage">
+        SELECT * FROM device_manage WHERE cloud_id = #{cloudId}
+    </select>
+
+    <update id="closeDevicePunch">
+        UPDATE device_manage set is_punch = #{isPunch} WHERE id = #{id}
+    </update>
+
+    <update id="closeDeviceInsure">
+        UPDATE device_manage set is_insure = #{isInsure} WHERE id = #{id}
+    </update>
 </mapper>

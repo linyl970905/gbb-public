@@ -1,6 +1,7 @@
 package com.tencent.wxcloudrun.service;
 
 import com.tencent.wxcloudrun.config.ApiResponse;
+import com.tencent.wxcloudrun.dto.EmpRegisterDTO;
 import com.tencent.wxcloudrun.model.EmployeeManage;
 
 /**
@@ -16,5 +17,7 @@ public interface TerminalService {
 
     EmployeeManage getEmployeeByFaceId(String faceId);
 
-    ApiResponse addEmployeeManage(EmployeeManage employee) throws Exception;
+    ApiResponse updateEmployeeFace(String faceId, String faceUrl);
+
+    ApiResponse addEmployeeManage(EmpRegisterDTO registerDTO) throws Exception;
 }

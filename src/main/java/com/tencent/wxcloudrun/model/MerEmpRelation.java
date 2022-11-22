@@ -12,14 +12,14 @@ import java.io.Serializable;
  */
 @Data
 @Accessors(chain = true)
-public class DeviceEmployeeRelation implements Serializable {
+public class MerEmpRelation implements Serializable {
 
     // 主键id
     private Integer id;
 
-    // 设备id
-    private Integer deviceId;
+    // 商户id
+    private Integer merId;
 
     // 雇员id
-    private Integer employeeId;
+    private Integer empId;
 }

@@ -6,6 +6,7 @@ import com.tencent.wxcloudrun.model.*;
 import com.tencent.wxcloudrun.service.GzhService;
 import com.tencent.wxcloudrun.utils.OrderNoType;
 import com.tencent.wxcloudrun.vo.CityAreaList;
+import com.tencent.wxcloudrun.vo.MerchantDetailVO;
 import com.tencent.wxcloudrun.vo.ProvinceCityList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -84,7 +85,79 @@ public class GzhServiceImpl implements GzhService {
     }
 
     @Override
+    public ApiResponse aliveDevice(String cloudId, String snCode) {
+        // 创建设备信息，将设备绑定至商户下面
+        DeviceManage device = new DeviceManage().setCloudId(cloudId).setSnCode(snCode).setStatus(1);
+        gzhMapper.addDeviceManage(device);
+        return ApiResponse.ok();
+    }
+
+    @Override
+    public ApiResponse getMerchantByCloudId(String cloudId) {
+        // 获取商户基本信息
+        MerchantManage merchant = gzhMapper.getMerchantByCloudId(cloudId);
+        // 获取设备数
+        Integer deviceNum = gzhMapper.getDeviceNumByCloudId(cloudId);
+        // 获取员工数
+        Integer employeeNum = gzhMapper.getEmployeeNumByMerId(merchant.getId());
+
+        // 返回实体类对象
+        MerchantDetailVO detail = new MerchantDetailVO()
+                .setId(merchant.getId())
+                .setCloudId(merchant.getCloudId())
+                .setName(merchant.getName())
+                .setLinkPerson(merchant.getLinkPerson())
+                .setLinkPhone(merchant.getLinkPhone())
+                .setAddress(merchant.getAddress())
+                .setBusinessLicense(merchant.getBusinessLicense())
+                .setPlaceImage(merchant.getPlaceImage())
+                .setFaceScore(merchant.getFaceScore())
+                .setCreateTime(merchant.getCreateTime())
+                .setDeviceNum(deviceNum)
+                .setEmployeeNum(employeeNum);
+
+        return ApiResponse.ok(detail);
+    }
+
+    @Override
+    public ApiResponse updateMerchantInfo(MerchantManage merchant) {
+        gzhMapper.updateMerchantInfo(merchant);
+        return ApiResponse.ok();
+    }
+
+    @Override
     public List<EmployeeManage> getEmployeeList(String cloudId) {
         return gzhMapper.getEmployeeList(cloudId);
+    }
+
+    @Override
+    public void closeEmpPunch(Integer id, Integer isPunch) {
+        gzhMapper.closeEmpPunch(id, isPunch);
+    }
+
+    @Override
+    public void closeEmpInsure(Integer id, Integer isInsure) {
+        gzhMapper.closeEmpInsure(id, isInsure);
+    }
+
+    @Override
+    public void delMerEmpRelation(String cloudId, Integer empId) {
+        MerchantManage merchant = gzhMapper.getMerchantByCloudId(cloudId);
+        gzhMapper.delMerEmpRelation(merchant.getId(), empId);
+    }
+
+    @Override
+    public List<DeviceManage> getDeviceList(String cloudId) {
+        return gzhMapper.getDeviceList(cloudId);
+    }
+
+    @Override
+    public void closeDevicePunch(Integer id, Integer isPunch) {
+        gzhMapper.closeDevicePunch(id, isPunch);
+    }
+
+    @Override
+    public void closeDeviceInsure(Integer id, Integer isInsure) {
+        gzhMapper.closeDeviceInsure(id, isInsure);
     }
 }

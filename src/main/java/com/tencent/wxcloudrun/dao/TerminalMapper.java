@@ -16,11 +16,15 @@ public interface TerminalMapper {
 
     MerchantManage getMerchantByCloudId(String cloudId);
 
+    MerchantManage getMerchantByEmpId(Integer empId);
+
+    Integer checkRelation(@Param("merId") Integer merId, @Param("empId") Integer empId);
+
     EmployeeManage getEmployeeByFaceId(String faceId);
 
     Integer addEmployeeManage(EmployeeManage employee);
 
-    void addDeviceEmployee(@Param("deviceId") Integer deviceId, @Param("employeeId") Integer employeeId);
+    void addMerEmpRelation(@Param("merId") Integer merId, @Param("empId") Integer empId);
 
     Integer updateEmployeeManage(EmployeeManage manage);
 }

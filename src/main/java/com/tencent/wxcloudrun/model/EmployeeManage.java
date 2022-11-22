@@ -43,10 +43,10 @@ public class EmployeeManage implements Serializable {
     private Integer isManager;
 
     // 是否考勤 0-默认否 1-是
-    private Integer isWork;
+    private Integer isPunch;
 
     // 是否参保 0-默认否 1-是
-    private Integer isInsured;
+    private Integer isInsure;
 
     // 状态 0-默认正常 1-删除
     private Integer status;

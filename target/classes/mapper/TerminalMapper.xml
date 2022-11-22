@@ -6,6 +6,15 @@
         SELECT * FROM device_manage WHERE is_delete = 0 AND sn_code = #{snCode}
     </select>
 
+    <select id="getDeviceByFaceId" parameterType="java.lang.Integer" resultType="com.tencent.wxcloudrun.model.DeviceManage">
+        SELECT
+            dm.*
+        FROM
+            device_manage dm
+        LEFT JOIN device_employee_relation der ON der.employee_id = dm.id
+        WHERE der.id = #{faceId} limit 1
+    </select>
+
     <select id="getMerchantByCloudId" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.MerchantManage">
         SELECT * FROM merchant_manage WHERE cloud_id = #{cloudId}
     </select>
@@ -25,7 +34,8 @@
 
     <update id="updateEmployeeManage" parameterType="com.tencent.wxcloudrun.model.EmployeeManage">
         UPDATE employee_manage
-        SET open_id = #{openId}, name = #{name}, id_card = #{idCard}, phone = #{phone}, job_code = #{jobCode}
+        SET open_id = #{openId}, face_url = #{faceUrl},
+            name = #{name}, id_card = #{idCard}, phone = #{phone}, job_code = #{jobCode}
         WHERE id = #{id}
     </update>
 </mapper>

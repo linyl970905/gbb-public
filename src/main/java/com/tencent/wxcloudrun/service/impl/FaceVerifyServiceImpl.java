@@ -20,7 +20,6 @@ import java.util.Map;
  */
 @Service
 public class FaceVerifyServiceImpl implements FaceVerifyService {
-
     @Override
     public String searchFace(String faceUrl) {
 

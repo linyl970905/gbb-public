@@ -1,7 +1,7 @@
 package com.tencent.wxcloudrun.controller;
 
 import com.tencent.wxcloudrun.config.ApiResponse;
-import com.tencent.wxcloudrun.model.EmployeeManage;
+import com.tencent.wxcloudrun.dto.EmpRegisterDTO;
 import com.tencent.wxcloudrun.service.TerminalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -52,12 +52,23 @@ public class TerminalController implements Serializable {
     }
 
     /**
+     * 登记时，更换清晰的人脸照
+     * @param faceId
+     * @param faceUrl
+     * @return
+     */
+    @GetMapping("/updateEmployeeFace")
+    public ApiResponse updateEmployeeFace(@RequestParam String faceId, @RequestParam String faceUrl) {
+        return terminalService.updateEmployeeFace(faceId, faceUrl);
+    }
+
+    /**
      * 小程序-员工登记
-     * @param manage
+     * @param registerDTO
      * @return
      */
     @PostMapping("/addEmployeeManage")
-    public ApiResponse addEmployeeManage(@RequestBody EmployeeManage manage) throws Exception {
-        return terminalService.addEmployeeManage(manage);
+    public ApiResponse addEmployeeManage(@RequestBody EmpRegisterDTO registerDTO) throws Exception {
+        return terminalService.addEmployeeManage(registerDTO);
     }
 }

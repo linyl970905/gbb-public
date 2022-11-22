@@ -1,6 +1,7 @@
 package com.tencent.wxcloudrun.controller;
 
 import com.tencent.wxcloudrun.config.ApiResponse;
+import com.tencent.wxcloudrun.model.MerchantManage;
 import com.tencent.wxcloudrun.model.Order;
 import com.tencent.wxcloudrun.service.GzhService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,37 @@ public class GzhController implements Serializable {
     }
 
     /**
+     * 激活设备-绑定商户
+     * @param cloudId
+     * @param snCode
+     * @return
+     */
+    @GetMapping("/aliveDevice")
+    public ApiResponse aliveDevice(@RequestParam String cloudId, @RequestParam String snCode) {
+        return gzhService.aliveDevice(cloudId, snCode);
+    }
+
+    /**
+     * 根据cloudId获取商户基本信息
+     * @param cloudId
+     * @return
+     */
+    @GetMapping("/getMerchantByCloudId")
+    public ApiResponse getMerchantByCloudId(@RequestParam String cloudId) {
+        return gzhService.getMerchantByCloudId(cloudId);
+    }
+
+    /**
+     * 修改商户基本信息
+     * @param merchant
+     * @return
+     */
+    @GetMapping("/getMerchantByCloudId")
+    public ApiResponse updateMerchantInfo(@RequestBody MerchantManage merchant) {
+        return gzhService.updateMerchantInfo(merchant);
+    }
+
+    /**
      * 根据商户id查找雇员列表
      * @param cloudId
      * @return
@@ -57,5 +89,75 @@ public class GzhController implements Serializable {
     @GetMapping("/getEmployeeList")
     public ApiResponse getEmployeeList(@RequestParam String cloudId) {
         return ApiResponse.ok(gzhService.getEmployeeList(cloudId));
+    }
+
+    /**
+     * 雇员-关闭考勤
+     * @param id
+     * @param isPunch
+     * @return
+     */
+    @GetMapping("/closeEmpPunch")
+    public ApiResponse closeEmpPunch(@RequestParam Integer id, @RequestParam Integer isPunch) {
+        gzhService.closeEmpPunch(id, isPunch);
+        return ApiResponse.ok();
+    }
+
+    /**
+     * 雇员-关闭投保
+     * @param id
+     * @param isInsure
+     * @return
+     */
+    @GetMapping("/closeEmpInsure")
+    public ApiResponse closeEmpInsure(@RequestParam Integer id, @RequestParam Integer isInsure) {
+        gzhService.closeEmpInsure(id, isInsure);
+        return ApiResponse.ok();
+    }
+
+    /**
+     * 雇员-删除
+     * @param cloudId
+     * @param empId
+     * @return
+     */
+    @GetMapping("/delMerEmpRelation")
+    public ApiResponse delMerEmpRelation(@RequestParam String cloudId, @RequestParam Integer empId) {
+        gzhService.delMerEmpRelation(cloudId, empId);
+        return ApiResponse.ok();
+    }
+
+    /**
+     * 根据商户id查找设备列表
+     * @param cloudId
+     * @return
+     */
+    @GetMapping("/getDeviceList")
+    public ApiResponse getDeviceList(@RequestParam String cloudId) {
+        return ApiResponse.ok(gzhService.getDeviceList(cloudId));
+    }
+
+    /**
+     * 设备-关闭考勤
+     * @param id
+     * @param isPunch
+     * @return
+     */
+    @GetMapping("/closeDevicePunch")
+    public ApiResponse closeDevicePunch(@RequestParam Integer id, @RequestParam Integer isPunch) {
+        gzhService.closeDevicePunch(id, isPunch);
+        return ApiResponse.ok();
+    }
+
+    /**
+     * 设备-关闭投保
+     * @param id
+     * @param isInsure
+     * @return
+     */
+    @GetMapping("/closeDeviceInsure")
+    public ApiResponse closeDeviceInsure(@RequestParam Integer id, @RequestParam Integer isInsure) {
+        gzhService.closeDeviceInsure(id, isInsure);
+        return ApiResponse.ok();
     }
 }

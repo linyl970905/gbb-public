@@ -1,7 +1,9 @@
 package com.tencent.wxcloudrun.service;
 
 import com.tencent.wxcloudrun.config.ApiResponse;
+import com.tencent.wxcloudrun.model.DeviceManage;
 import com.tencent.wxcloudrun.model.EmployeeManage;
+import com.tencent.wxcloudrun.model.MerchantManage;
 import com.tencent.wxcloudrun.model.Order;
 import com.tencent.wxcloudrun.vo.ProvinceCityList;
 
@@ -20,5 +22,23 @@ public interface GzhService {
 
     ApiResponse createOrder(Order order);
 
+    ApiResponse aliveDevice(String cloudId, String snCode);
+
+    ApiResponse getMerchantByCloudId(String cloudId);
+
+    ApiResponse updateMerchantInfo(MerchantManage merchant);
+
     List<EmployeeManage> getEmployeeList(String cloudId);
+
+    void closeEmpPunch(Integer id, Integer isPunch);
+
+    void closeEmpInsure(Integer id, Integer isInsure);
+
+    void delMerEmpRelation(String cloudId, Integer empId);
+
+    List<DeviceManage> getDeviceList(String cloudId);
+
+    void closeDevicePunch(Integer id, Integer isPunch);
+
+    void closeDeviceInsure(Integer id, Integer isInsure);
 }
