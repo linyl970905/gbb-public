@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @Motto: Nothing is impossible
  */
 @RestController
-@RequestMapping("/terminal")
+@RequestMapping("/punch/attend")
 public class PunchAttendController implements Serializable {
 
     @Autowired
