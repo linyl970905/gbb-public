@@ -33,17 +33,11 @@
     </insert>
 
     <select id="getDeviceNumByCloudId" parameterType="java.lang.String" resultType="java.lang.Integer">
-        SELECT * FROM device_manage WHERE cloud_id = #{cloudId}
+        SELECT count(1) FROM device_manage WHERE cloud_id = #{cloudId}
     </select>
 
-    <select id="getEmployeeNumByCloudId" parameterType="java.lang.String" resultType="java.lang.Integer">
-        SELECT
-            COUNT ( 1 )
-        FROM
-            employee_manage em
-        LEFT JOIN device_employee_relation der ON der.employee_id = em.id
-        LEFT JOIN device_manage dm ON dm.id = der.device_id
-        WHERE dm.cloud_id = #{cloudId}
+    <select id="getEmployeeNumByMerId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT count(1) FROM mer_emp_relation WHERE mer_id = #{merId}
     </select>
 
     <update id="updateMerchantInfo" parameterType="com.tencent.wxcloudrun.model.MerchantManage">
@@ -62,6 +56,18 @@
         LEFT JOIN device_manage dm ON dm.id = der.device_id
         WHERE dm.cloud_id = #{cloudId}
     </select>
+
+    <update id="closeEmpPunch">
+        UPDATE employee_manage set is_punch = #{isPunch} WHERE id = #{id}
+    </update>
+
+    <update id="closeEmpInsure">
+        UPDATE employee_manage set is_insure = #{isInsure} WHERE id = #{id}
+    </update>
+
+    <delete id="delMerEmpRelation">
+        DELETE * from mer_emp_relation WHERE mer_id = #{merId} AND emp_id = #{empId}
+    </delete>
 
     <select id="getDeviceList" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.DeviceManage">
         SELECT * FROM device_manage WHERE cloud_id = #{cloudId}

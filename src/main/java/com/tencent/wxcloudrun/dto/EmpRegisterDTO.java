@@ -1,7 +1,8 @@
 package com.tencent.wxcloudrun.dto;
 
-import com.tencent.wxcloudrun.model.EmployeeManage;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * @Author: zero
@@ -9,7 +10,7 @@ import lombok.Data;
  * @Motto: Nothing is impossible
  */
 @Data
-public class EmpRegisterDTO extends EmployeeManage {
+public class EmpRegisterDTO implements Serializable {
 
     // 主键id
     private Integer id;

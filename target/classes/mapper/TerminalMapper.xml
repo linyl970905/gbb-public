@@ -6,17 +6,18 @@
         SELECT * FROM device_manage WHERE is_delete = 0 AND sn_code = #{snCode}
     </select>
 
-    <select id="getDeviceByFaceId" parameterType="java.lang.Integer" resultType="com.tencent.wxcloudrun.model.DeviceManage">
-        SELECT
-            dm.*
-        FROM
-            device_manage dm
-        LEFT JOIN device_employee_relation der ON der.employee_id = dm.id
-        WHERE der.id = #{faceId} limit 1
-    </select>
-
     <select id="getMerchantByCloudId" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.MerchantManage">
         SELECT * FROM merchant_manage WHERE cloud_id = #{cloudId}
+    </select>
+
+    <select id="getMerchantByEmpId" parameterType="java.lang.Integer" resultType="com.tencent.wxcloudrun.model.MerchantManage">
+        SELECT mm.* FROM merchant_manage mm
+        LEFT JOIN mer_emp_relation mer ON mer.mer_id = mm.id
+        WHERE mer.emp_id = #{empId}
+    </select>
+
+    <select id="checkRelation" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM mer_emp_relation WHERE mer_id = #{merId} and emp_id = #{empId}
     </select>
 
     <select id="getEmployeeByFaceId" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.EmployeeManage">
@@ -25,17 +26,17 @@
 
     <insert id="addEmployeeManage" parameterType="com.tencent.wxcloudrun.model.EmployeeManage"
             useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO employee_manage (face_url) VALUES (#{faceUrl})
+        INSERT INTO employee_manage (face_url, status) VALUES (#{faceUrl}, 1)
     </insert>
 
-    <insert id="addDeviceEmployee">
-        INSERT INTO device_employee_relation (device_id, employee_id) VALUES (#{deviceId}, #{employeeId})
+    <insert id="addMerEmpRelation">
+        INSERT INTO mer_emp_relation (mer_id, emp_id) VALUES (#{merId}, #{empId})
     </insert>
 
     <update id="updateEmployeeManage" parameterType="com.tencent.wxcloudrun.model.EmployeeManage">
         UPDATE employee_manage
         SET open_id = #{openId}, face_url = #{faceUrl},
-            name = #{name}, id_card = #{idCard}, phone = #{phone}, job_code = #{jobCode}
+            name = #{name}, id_card = #{idCard}, phone = #{phone}, address = #{address}, job_code = #{jobCode}
         WHERE id = #{id}
     </update>
 </mapper>
