@@ -76,7 +76,7 @@ public class GzhController implements Serializable {
      * @param merchant
      * @return
      */
-    @GetMapping("/getMerchantByCloudId")
+    @GetMapping("/updateMerchantInfo")
     public ApiResponse updateMerchantInfo(@RequestBody MerchantManage merchant) {
         return gzhService.updateMerchantInfo(merchant);
     }

@@ -1,5 +1,6 @@
 package com.tencent.wxcloudrun.service;
 
+import com.tencent.wxcloudrun.config.ApiResponse;
 import com.tencent.wxcloudrun.model.PunchAttendRule;
 
 /**
@@ -12,4 +13,6 @@ public interface PunchAttendService {
     PunchAttendRule getRuleByMerId(Integer merId);
 
     void addRule(PunchAttendRule rule);
+
+    ApiResponse punchAttend(String snCode, String userId);
 }

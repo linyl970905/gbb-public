@@ -16,4 +16,25 @@
              #{threeStartTime}, #{threeEndTime}, #{fourStartTime}, #{fourEndTime}, #{fiveStartTime},
              #{fiveEndTime}, #{sixStartTime}, #{sixEndTime}, NOW())
     </insert>
+
+    <select id="getMerchantBySnCode" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.MerchantManage">
+        SELECT mm.* FROM merchant_manage mm
+        LEFT JOIN device_manage dm ON dm.cloud_id = mm.cloud_id
+        WHERE dm.sn_code = #{snCode}
+    </select>
+
+    <select id="getDeviceBySnCode" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.DeviceManage">
+        SELECT * FROM device_manage WHERE sn_code = #{snCode}
+    </select>
+
+    <select id="getEmployeeById" parameterType="java.lang.Integer" resultType="com.tencent.wxcloudrun.model.EmployeeManage">
+        SELECT * FROM employee_manage WHERE id = #{id}
+    </select>
+
+    <insert id="addPunchAttendRecord" parameterType="com.tencent.wxcloudrun.model.PunchAttendRecord">
+        INSERT INTO punch_attend_record
+            (mer_id, emp_id, sn_code, name, id_card, phone, address, job_code, status, create_time)
+        VALUES
+            (#{merId}, #{empId}, #{snCode}, #{name}, #{idCard}, #{phone}, #{address}, #{jobCode}, #{status}, #{createTime})
+    </insert>
 </mapper>

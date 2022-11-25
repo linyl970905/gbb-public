@@ -25,40 +25,58 @@ public class PunchAttendRule implements Serializable {
     private Integer punchType;
 
     // 两次打卡开始时间1
-    private Date oneStartTime;
+    private String oneStartTime;
+
+    // 两次打卡正常时间1
+    private String oneNormalTime;
 
     // 两次打卡结束时间1
-    private Date oneEndTime;
+    private String oneEndTime;
 
     // 两次打卡开始时间2
-    private Date twoStartTime;
+    private String twoStartTime;
+
+    // 两次打卡正常时间2
+    private String twoNormalTime;
 
     // 两次打卡结束时间2
-    private Date twoEndTime;
+    private String twoEndTime;
 
     // 四次打卡开始时间1
-    private Date threeStartTime;
+    private String threeStartTime;
+
+    // 四次打卡正常时间1
+    private String threeNormalTime;
 
     // 四次打卡结束时间1
-    private Date threeEndTime;
+    private String threeEndTime;
 
     // 四次打卡开始时间2
-    private Date fourStartTime;
+    private String fourStartTime;
+
+    // 四次打卡正常时间2
+    private String fourNormalTime;
 
     // 四次打卡结束时间2
-    private Date fourEndTime;
+    private String fourEndTime;
 
     // 六次打卡开始时间1
-    private Date fiveStartTime;
+    private String fiveStartTime;
+
+    // 六次打卡正常时间1
+    private String fiveNormalTime;
 
     // 六次打卡结束时间1
-    private Date fiveEndTime;
+    private String fiveEndTime;
 
     // 六次打卡开始时间2
-    private Date sixStartTime;
+    private String sixStartTime;
+
+    // 六次打卡正常时间2
+    private String sixNormalTime;
 
     // 六次打卡结束时间2
-    private Date sixEndTime;
+    private String sixEndTime;
 
     // 创建时间
     private Date createTime;
