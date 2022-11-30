@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tencent.wxcloudrun.dao.PunchAttendMapper">
+
+    <select id="getRuleByMerId" parameterType="java.lang.Integer" resultType="com.tencent.wxcloudrun.model.PunchAttendRule">
+        SELECT * FROM punch_attend_rule WHERE mer_id = #{merId}
+    </select>
+
+    <insert id="addRule" parameterType="com.tencent.wxcloudrun.model.PunchAttendRule">
+        INSERT INTO punch_attend_rule
+            (mer_id, punch_type, one_start_time, one_normal_time, one_end_time, two_start_time,
+             two_normal_time, two_end_time, three_start_time, three_normal_time, three_end_time,
+             four_start_time, four_normal_time, four_end_time, five_start_time, five_normal_time,
+             five_end_time, six_start_time, six_normal_time, six_end_time, create_time)
+        VALUES
+            (#{merId}, #{punchType}, #{oneStartTime}, #{oneNormalTime}, #{oneEndTime}, #{twoStartTime},
+             #{twoNormalTime}, #{twoEndTime}, #{threeStartTime}, #{threeNormalTime}, #{threeEndTime},
+             #{fourStartTime}, #{fourNormalTime}, #{fourEndTime}, #{fiveStartTime}, #{fiveNormalTime},
+             #{fiveEndTime}, #{sixStartTime}, #{sixNormalTime}, #{sixEndTime}, NOW())
+    </insert>
+
+    <select id="getMerchantBySnCode" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.MerchantManage">
+        SELECT mm.* FROM merchant_manage mm
+        LEFT JOIN device_manage dm ON dm.cloud_id = mm.cloud_id
+        WHERE dm.sn_code = #{snCode}
+    </select>
+
+    <select id="getDeviceBySnCode" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.DeviceManage">
+        SELECT * FROM device_manage WHERE sn_code = #{snCode}
+    </select>
+
+    <select id="getEmployeeById" parameterType="java.lang.Integer" resultType="com.tencent.wxcloudrun.model.EmployeeManage">
+        SELECT * FROM employee_manage WHERE id = #{id}
+    </select>
+
+    <select id="getNumByTime" resultType="java.lang.Integer">
+        SELECT count(1) from punch_attend_record
+        WHERE mer_id = #{merId} AND emp_id = #{empId} AND status = #{status}
+              AND (create_time BETWEEN #{startTime} AND #{endTime})
+    </select>
+
+    <update id="syncPunchStatus">
+        UPDATE punch_attend_record
+        SET status = #{status}
+        WHERE mer_id = #{merId} AND emp_id = #{empId}
+              AND (create_time BETWEEN #{startTime} AND #{endTime})
+    </update>
+
+    <insert id="addPunchAttendRecord" parameterType="com.tencent.wxcloudrun.model.PunchAttendRecord">
+        INSERT INTO punch_attend_record
+            (mer_id, emp_id, sn_code, name, id_card, phone, address, job_code, status, create_time)
+        VALUES
+            (#{merId}, #{empId}, #{snCode}, #{name}, #{idCard}, #{phone}, #{address}, #{jobCode}, #{status}, #{createTime})
+    </insert>
+
+    <select id="getInsDayRecordByIdCard" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.InsDayRecord">
+        SELECT * FROM ins_day_record WHERE id_card = #{idCard} ORDER BY create_time DESC limit 1
+    </select>
+
+    <select id="getInsDayToday" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT count(1) FROM ins_day_record
+        WHERE to_days(create_time) = to_days(now()) AND id_card = #{idCard}
+    </select>
+
+    <insert id="addInsDayRecord" parameterType="com.tencent.wxcloudrun.model.InsDayRecord">
+        INSERT INTO ins_day_record
+            (mer_id, emp_id, sn_code, name, id_card, phone, address, job_code, plan, start_time, end_time, response_msg, create_time)
+        VALUES
+            (#{merId}, #{empId}, #{snCode}, #{name}, #{idCard}, #{phone}, #{address}, #{jobCode}, #{plan}, #{startTime}, #{endTime}, #{responseMsg}, #{createTime})
+    </insert>
+
+    <select id="getMerchantByCloudId" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.MerchantManage">
+        SELECT * FROM merchant_manage WHERE cloud_id = #{cloudId}
+    </select>
+
+    <select id="getPunchEmpList" parameterType="java.lang.Integer" resultType="com.tencent.wxcloudrun.vo.PunchCollectVO">
+        SELECT em.id, em.name FROM employee_manage em
+        LEFT JOIN mer_emp_relation mer ON mer.emp_id = em.id
+        WHERE mer.mer_id = #{merId}
+    </select>
+
+    <select id="getAllDays" resultType="java.lang.Integer">
+        SELECT DATE_FORMAT(create_time, '%Y-%M'), count(1) FROM punch_attend_record
+        WHERE status != 0 AND mer_id = #{merId} AND emp_id = #{empId}
+              AND DATE_FORMAT(create_time, '%Y-%M') = #{yearMonth}
+        GROUP BY DATE_FORMAT(create_time, '%Y-%M')
+    </select>
+
+    <select id="getLateDays" resultType="java.lang.Integer">
+        SELECT DATE_FORMAT(create_time, '%Y-%M'), count(1) FROM punch_attend_record
+        WHERE status = 2 AND mer_id = #{merId} AND emp_id = #{empId}
+              AND DATE_FORMAT(create_time, '%Y-%M') = #{yearMonth}
+        GROUP BY DATE_FORMAT(create_time, '%Y-%M')
+    </select>
+
+    <select id="getLeaveEarlyDays" resultType="java.lang.Integer">
+        SELECT DATE_FORMAT(create_time, '%Y-%M'), count(1) FROM punch_attend_record
+        WHERE status = 3 AND mer_id = #{merId} AND emp_id = #{empId}
+              AND DATE_FORMAT(create_time, '%Y-%M') = #{yearMonth}
+        GROUP BY DATE_FORMAT(create_time, '%Y-%M')
+    </select>
+
+    <select id="getInsureDays" resultType="java.lang.Integer">
+        SELECT DATE_FORMAT(create_time, '%Y-%M'), count(1) FROM ins_day_record
+        WHERE mer_id = #{merId} AND emp_id = #{empId}
+              AND DATE_FORMAT(create_time, '%Y-%M') = #{yearMonth}
+        GROUP BY DATE_FORMAT(create_time, '%Y-%M')
+    </select>
+</mapper>

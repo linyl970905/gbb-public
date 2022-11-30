@@ -23,8 +23,8 @@
     </select>
 
     <insert id="createOrder" parameterType="com.tencent.wxcloudrun.model.Order">
-        INSERT INTO order(cloud_id, name, spec, price, buy_num, order_no, order_price, promotion_code, create_time)
-        VALUES(#{cloudId}, #{name}, #{spec}, #{price}, #{buyNum}, #{orderNo}, #{orderPrice}, #{promotionCode}, NOW())
+        INSERT INTO order(cloud_id, name, spec, price, buy_num, link_person, link_phone, link_address, order_no, order_price, promotion_code, create_time)
+        VALUES(#{cloudId}, #{name}, #{spec}, #{price}, #{buyNum}, #{linkPerson}, #{linkPhone}, #{linkAddress}, #{orderNo}, #{orderPrice}, #{promotionCode}, NOW())
     </insert>
 
     <insert id="addDeviceManage" parameterType="com.tencent.wxcloudrun.model.DeviceManage">

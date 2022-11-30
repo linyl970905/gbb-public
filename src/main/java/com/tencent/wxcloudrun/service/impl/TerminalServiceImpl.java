@@ -4,18 +4,28 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.tencent.wxcloudrun.config.ApiResponse;
+import com.tencent.wxcloudrun.dao.PunchAttendMapper;
 import com.tencent.wxcloudrun.dao.TerminalMapper;
 import com.tencent.wxcloudrun.dto.EmpRegisterDTO;
-import com.tencent.wxcloudrun.model.DeviceManage;
-import com.tencent.wxcloudrun.model.EmployeeManage;
-import com.tencent.wxcloudrun.model.MerchantManage;
+import com.tencent.wxcloudrun.model.*;
 import com.tencent.wxcloudrun.service.FaceVerifyService;
+import com.tencent.wxcloudrun.service.PunchAttendService;
 import com.tencent.wxcloudrun.service.TerminalService;
 import com.tencent.wxcloudrun.utils.zhengmian.HttpClientPost;
+import com.tencent.wxcloudrun.vo.EmployeePageVO;
 import com.tencent.wxcloudrun.vo.FaceInfoVO;
+import com.tencent.wxcloudrun.vo.PunchArrayVO;
+import com.tencent.wxcloudrun.vo.PunchDetailVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @Author: zero
@@ -29,7 +39,13 @@ public class TerminalServiceImpl implements TerminalService {
     private TerminalMapper terminalMapper;
 
     @Autowired
+    private PunchAttendMapper punchAttendMapper;
+
+    @Autowired
     private FaceVerifyService faceVerifyService;
+
+    @Autowired
+    private PunchAttendService punchAttendService;
 
     @Override
     public ApiResponse getDeviceBySnCode(String snCode) {
@@ -69,6 +85,9 @@ public class TerminalServiceImpl implements TerminalService {
                     Integer checkRelation = terminalMapper.checkRelation(merchant.getId(), Integer.valueOf(userId));
                     if(checkRelation > 0) {
                         // 执行打卡操作
+                        punchAttendService.punchAttend(snCode, userId);
+                        // 执行投保操作
+                        punchAttendService.insureApply(snCode, userId);
 
                         return ApiResponse.responseData(200, "打卡成功！", "");
                     } else {
@@ -77,11 +96,9 @@ public class TerminalServiceImpl implements TerminalService {
                         return ApiResponse.responseData(201, "用户未与该商户进行绑定！", faceInfoVO);
                     }
                 } else {
-
                     // 创建脸部-雇员信息记录
                     EmployeeManage employee = new EmployeeManage().setFaceUrl(faceUrl);
                     terminalMapper.addEmployeeManage(employee);
-
                     // 将设备编码sn_code、人脸id返回给前端进行注册操作
                     FaceInfoVO faceInfoVO = new FaceInfoVO().setFaceId(employee.getId()).setSnCode(snCode);
                     return ApiResponse.responseData(201, "用户未注册！", faceInfoVO);
@@ -101,7 +118,6 @@ public class TerminalServiceImpl implements TerminalService {
     public ApiResponse updateEmployeeFace(String faceId, String faceUrl) {
         // 1.获取之前的人脸信息、设备信息、商家信息
         EmployeeManage employee = terminalMapper.getEmployeeByFaceId(faceId);
-        MerchantManage merchant = terminalMapper.getMerchantByEmpId(employee.getId());
 
         // 2.对比人脸库，替换后的照片是否已存在
         String response = faceVerifyService.searchFace(faceUrl);
@@ -165,5 +181,110 @@ public class TerminalServiceImpl implements TerminalService {
         } else {
             return ApiResponse.error(msg);
         }
+    }
+
+    @Override
+    public EmployeePageVO getEmployeePage(String openId) {
+        // 1.获取雇员基本信息
+        EmployeePageVO employeePage = terminalMapper.getEmployeePage(openId);
+        // 2.获取按天投保最后一次保险过期时间
+        InsDayRecord insDayRecord = terminalMapper.getRecordByIdCard(employeePage.getIdCard());
+        if (insDayRecord == null) {
+            employeePage.setEndTime(null);
+        } else {
+            employeePage.setEndTime(insDayRecord.getEndTime());
+        }
+        return employeePage;
+    }
+
+    @Override
+    public List<MerchantManage> getMerchantList(Integer empId) {
+        return terminalMapper.getMerchantByEmpId(empId);
+    }
+
+    @Override
+    public List<PunchAttendRecord> getRecordByTime(Integer merId, Integer empId, String yearMonthDay) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date today = new Date();
+        if (yearMonthDay != null) {
+            try {
+                today = sdf.parse(yearMonthDay);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return terminalMapper.getRecordByTime(merId, empId, today);
+    }
+
+    @Override
+    public List<PunchDetailVO> getPunchDetail(Integer merId, Integer empId, String yearMonth) {
+        // 最终返回的结果集
+        List<PunchDetailVO> punchDetailVOList = new ArrayList<>();
+
+        // 1.获取当月的天数集合
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        yearMonth = yearMonth == null ? sdf.format(new Date()) : yearMonth;
+        int days = getMonthDays(yearMonth);
+        List<Date> daysList = new ArrayList<>();
+        try {
+            for (int i = 1; i <= 9; i++) {
+                daysList.add(sdf.parse(yearMonth + "-0" + i));
+            }
+            for (int i = 10; i <= 28; i++) {
+                daysList.add(sdf.parse(yearMonth + "-" + i));
+            }
+            if (days == 29) {
+                daysList.add(sdf.parse(yearMonth + "-29"));
+            } else if(days == 30) {
+                daysList.add(sdf.parse(yearMonth + "-29"));
+                daysList.add(sdf.parse(yearMonth + "-30"));
+            } else if (days == 31) {
+                daysList.add(sdf.parse(yearMonth + "-29"));
+                daysList.add(sdf.parse(yearMonth + "-30"));
+                daysList.add(sdf.parse(yearMonth + "-31"));
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        // 2.获取当月存在的打卡记录
+        List<Date> existDateList = punchAttendMapper.getExistPunchDate(merId, empId, yearMonth);
+        for (Date day : daysList) {
+            PunchDetailVO punchDetailVO = new PunchDetailVO();
+            punchDetailVO.setYearMonthDay(day);
+            if (existDateList.contains(day)) {
+                List<PunchArrayVO> arrayList = punchAttendMapper.getPunchArray(merId, empId, day);
+                int i = 0;
+                for (PunchArrayVO vo : arrayList) {
+                    if(vo.getStatus() != 1) {
+                        i++;
+                    }
+                }
+                punchDetailVO.setStatus(i == 0 ? 1 : 2);
+                punchDetailVO.setArrayList(arrayList);
+            } else {
+                punchDetailVO.setStatus(0);
+                punchDetailVO.setArrayList(null);
+            }
+            punchDetailVOList.add(punchDetailVO);
+        }
+
+        return punchDetailVOList;
+    }
+
+    /**
+     * 根据年-月返回当月的天数
+     * @param yearMonth
+     * @return
+     */
+    public static int getMonthDays(String yearMonth) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        Calendar cal = Calendar.getInstance();
+        try {
+            cal.setTime(sdf.parse(yearMonth));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
 }

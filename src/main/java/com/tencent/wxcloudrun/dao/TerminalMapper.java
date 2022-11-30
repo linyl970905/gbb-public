@@ -1,9 +1,11 @@
 package com.tencent.wxcloudrun.dao;
 
-import com.tencent.wxcloudrun.model.DeviceManage;
-import com.tencent.wxcloudrun.model.EmployeeManage;
-import com.tencent.wxcloudrun.model.MerchantManage;
+import com.tencent.wxcloudrun.model.*;
+import com.tencent.wxcloudrun.vo.EmployeePageVO;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @Author: zero
@@ -16,7 +18,7 @@ public interface TerminalMapper {
 
     MerchantManage getMerchantByCloudId(String cloudId);
 
-    MerchantManage getMerchantByEmpId(Integer empId);
+    List<MerchantManage> getMerchantByEmpId(Integer empId);
 
     Integer checkRelation(@Param("merId") Integer merId, @Param("empId") Integer empId);
 
@@ -27,4 +29,10 @@ public interface TerminalMapper {
     void addMerEmpRelation(@Param("merId") Integer merId, @Param("empId") Integer empId);
 
     Integer updateEmployeeManage(EmployeeManage manage);
+
+    EmployeePageVO getEmployeePage(String openId);
+
+    InsDayRecord getRecordByIdCard(String idCard);
+
+    List<PunchAttendRecord> getRecordByTime(@Param("merId") Integer merId, @Param("empId") Integer empId, @Param("yearMonthDay") Date yearMonthDay);
 }

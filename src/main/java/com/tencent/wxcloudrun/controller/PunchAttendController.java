@@ -40,4 +40,27 @@ public class PunchAttendController implements Serializable {
         punchAttendService.addRule(rule);
         return ApiResponse.ok();
     }
+
+    /**
+     * 考勤保险统计
+     * @param cloudId
+     * @param yearMonth
+     * @return
+     */
+    @GetMapping("/getPunchCollect")
+    public ApiResponse getPunchCollect(@RequestParam String cloudId, @RequestParam String yearMonth) {
+        return ApiResponse.ok(punchAttendService.getPunchCollect(cloudId, yearMonth));
+    }
+
+    /**
+     * 考勤保险统计-详情
+     * @param cloudId
+     * @param empId
+     * @param yearMonth
+     * @return
+     */
+    @GetMapping("/getPunchDetail")
+    public ApiResponse getPunchDetail(@RequestParam String cloudId, @RequestParam Integer empId, @RequestParam String yearMonth) {
+        return ApiResponse.ok(punchAttendService.getPunchDetail(cloudId, empId, yearMonth));
+    }
 }

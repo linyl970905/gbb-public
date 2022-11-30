@@ -71,4 +71,47 @@ public class TerminalController implements Serializable {
     public ApiResponse addEmployeeManage(@RequestBody EmpRegisterDTO registerDTO) throws Exception {
         return terminalService.addEmployeeManage(registerDTO);
     }
+
+    /**
+     * 小程序-员工首页(基本信息、保险信息)
+     * @param openId
+     * @return
+     */
+    public ApiResponse getEmployeePage(@RequestParam String openId) {
+        return ApiResponse.ok(terminalService.getEmployeePage(openId));
+    }
+
+    /**
+     * 小程序-获取雇员下的商家列表
+     * @param empId
+     * @return
+     */
+    @GetMapping("/getMerchantList")
+    public ApiResponse getMerchantList(@RequestParam Integer empId) {
+        return ApiResponse.ok(terminalService.getMerchantList(empId));
+    }
+
+    /**
+     * 小程序-首页获取具体某一天的打卡详情
+     * @param merId
+     * @param empId
+     * @param yearMonthDay
+     * @return
+     */
+    @GetMapping("/getRecordByTime")
+    public ApiResponse getRecordByTime(@RequestParam Integer merId, @RequestParam Integer empId, @RequestParam String yearMonthDay) {
+        return ApiResponse.ok(terminalService.getRecordByTime(merId, empId, yearMonthDay));
+    }
+
+    /**
+     * 小程序-雇员的打卡详情
+     * @param merId
+     * @param empId
+     * @param yearMonth
+     * @return
+     */
+    @GetMapping("/getPunchDetail")
+    public ApiResponse getPunchDetail(@RequestParam Integer merId, @RequestParam Integer empId, @RequestParam String yearMonth) {
+        return ApiResponse.ok(terminalService.getPunchDetail(merId, empId, yearMonth));
+    }
 }

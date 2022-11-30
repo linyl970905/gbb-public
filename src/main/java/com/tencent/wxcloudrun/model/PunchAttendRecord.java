@@ -42,6 +42,9 @@ public class PunchAttendRecord implements Serializable {
     // 工种
     private String jobCode;
 
+    // 打卡规则类型 1-两次打卡 2-四次打卡 3-六次打卡
+    private Integer punchType;
+
     // 状态 0-默认 1-按时 2-迟到 3-早退
     private Integer status;
 

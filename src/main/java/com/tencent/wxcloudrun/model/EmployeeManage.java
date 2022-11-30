@@ -36,6 +36,9 @@ public class EmployeeManage implements Serializable {
     // 联系地址
     private String address;
 
+    // 保险方案 1-默认50+5 2-80+8
+    private Integer plan;
+
     // 工种
     private String jobCode;
 

@@ -1,9 +1,12 @@
 package com.tencent.wxcloudrun.dao;
 
 import com.tencent.wxcloudrun.model.*;
+import com.tencent.wxcloudrun.vo.PunchArrayVO;
+import com.tencent.wxcloudrun.vo.PunchCollectVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author: zero
@@ -27,4 +30,26 @@ public interface PunchAttendMapper {
     void syncPunchStatus(@Param("merId") Integer merId, @Param("empId") Integer empId, @Param("status") Integer status, @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
     Integer addPunchAttendRecord(PunchAttendRecord record);
+
+    InsDayRecord getInsDayRecordByIdCard(String idCard);
+
+    Integer getInsDayToday(String idCard);
+
+    Integer addInsDayRecord(InsDayRecord record);
+
+    MerchantManage getMerchantByCloudId(String cloudId);
+
+    List<PunchCollectVO> getPunchEmpList(Integer merId);
+
+    Integer getAllDays(@Param("merId") Integer merId, @Param("empId") Integer empId, @Param("yearMonth") String yearMonth);
+
+    Integer getLateDays(@Param("merId") Integer merId, @Param("empId") Integer empId, @Param("yearMonth") String yearMonth);
+
+    Integer getLeaveEarlyDays(@Param("merId") Integer merId, @Param("empId") Integer empId, @Param("yearMonth") String yearMonth);
+
+    Integer getInsureDays(@Param("merId") Integer merId, @Param("empId") Integer empId, @Param("yearMonth") String yearMonth);
+
+    List<Date> getExistPunchDate(@Param("merId") Integer merId, @Param("empId") Integer empId, @Param("yearMonth") String yearMonth);
+
+    List<PunchArrayVO> getPunchArray(@Param("merId") Integer merId, @Param("empId") Integer empId, @Param("createTime") Date createTime);
 }

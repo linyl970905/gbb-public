@@ -34,6 +34,15 @@ public class Order implements Serializable {
     // 购买数量
     private Integer buyNum;
 
+    // 联系人
+    private String linkPerson;
+
+    // 联系方式
+    private String linkPhone;
+
+    // 联系地址
+    private String linkAddress;
+
     // 订单号
     private String orderNo;
 
