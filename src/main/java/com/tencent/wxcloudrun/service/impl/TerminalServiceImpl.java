@@ -1,5 +1,6 @@
 package com.tencent.wxcloudrun.service.impl;
 
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -79,7 +80,7 @@ public class TerminalServiceImpl implements TerminalService {
             if (userList != null) {
                 JSONObject parseObj = JSONUtil.parseObj(userList.get(0));
                 String userId = parseObj.getStr("user_id");
-                int score = Integer.valueOf(parseObj.getStr("score"));
+                int score = NumberUtil.parseInt(parseObj.getStr("score"));
                 if (score >= 85) { // 人脸比对值：85%相似度
                     // 查询该用户绑定的商户
                     Integer checkRelation = terminalMapper.checkRelation(merchant.getId(), Integer.valueOf(userId));
@@ -131,7 +132,7 @@ public class TerminalServiceImpl implements TerminalService {
             if (userList != null) {
                 JSONObject parseObj = JSONUtil.parseObj(userList.get(0));
                 // String userId = parseObj.getStr("user_id");
-                int score = Integer.valueOf(parseObj.getStr("score"));
+                int score = NumberUtil.parseInt(parseObj.getStr("score"));
                 if (score >= 85) {
                     return ApiResponse.error("该人脸照对应的雇员已存在！");
                 } else {

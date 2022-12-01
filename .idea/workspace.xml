@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a8d8e1b-9f90-40ad-8060-76d28a265733" name="Default Changelist" comment="" />
+    <list default="true" id="5a8d8e1b-9f90-40ad-8060-76d28a265733" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/service/impl/TerminalServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/service/impl/TerminalServiceImpl.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
