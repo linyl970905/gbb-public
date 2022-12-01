@@ -27,6 +27,10 @@
         VALUES(#{cloudId}, #{name}, #{spec}, #{price}, #{buyNum}, #{linkPerson}, #{linkPhone}, #{linkAddress}, #{orderNo}, #{orderPrice}, #{promotionCode}, NOW())
     </insert>
 
+    <select id="getDeviceBySnCode" resultType="com.tencent.wxcloudrun.model.DeviceManage">
+        SELECT * FROM device_manage WHERE status = 1 AND sn_code = #{snCode}
+    </select>
+
     <insert id="addDeviceManage" parameterType="com.tencent.wxcloudrun.model.DeviceManage">
         INSERT INTO device_manage (cloud_id, sn_code, status)
         VALUES (#{cloudId}, #{snCode}, 1)
