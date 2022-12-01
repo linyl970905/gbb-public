@@ -39,4 +39,18 @@
             name = #{name}, id_card = #{idCard}, phone = #{phone}, address = #{address}, job_code = #{jobCode}
         WHERE id = #{id}
     </update>
+
+    <select id="getEmployeePage" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.vo.EmployeePageVO">
+        SELECT * FROM employee_manage WHERE status = 0 AND open_id = #{openId}
+    </select>
+
+    <select id="getRecordByIdCard" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.InsDayRecord">
+        SELECT * FROM ins_day_record WHERE id_card = #{idCard} ORDER BY create_time DESC limit 1
+    </select>
+
+    <select id="getRecordByTime" resultType="com.tencent.wxcloudrun.model.PunchAttendRecord">
+        SELECT * FROM punch_attend_record
+        WHERE status != 0 AND mer_id = #{merId} AND emp_id = #{empId}
+              AND to_days(create_time) = to_days(#{yearMonthDay})
+    </select>
 </mapper>

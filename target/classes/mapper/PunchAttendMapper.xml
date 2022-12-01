@@ -106,4 +106,22 @@
               AND DATE_FORMAT(create_time, '%Y-%M') = #{yearMonth}
         GROUP BY DATE_FORMAT(create_time, '%Y-%M')
     </select>
+
+    <select id="getExistPunchDate" resultType="date">
+        SELECT
+            DATE_FORMAT(create_time,'%Y-%m-%d') as createTime
+        FROM
+            punch_attend_record
+        WHERE
+            mer_id = #{merId} AND emp_id = #{empId} AND
+            DATE_FORMAT(create_time,'%Y-%m') = #{yearMonth}
+        GROUP BY
+            DATE_FORMAT(create_time,'%Y-%m-%d')
+    </select>
+
+    <select id="getPunchArray" resultType="com.tencent.wxcloudrun.vo.PunchArrayVO">
+        SELECT * FROM punch_attend_record
+        WHERE status != 0 AND mer_id = #{merId} AND emp_id = #{empId}
+              AND to_days(create_time) = to_days(#{createTime})
+    </select>
 </mapper>

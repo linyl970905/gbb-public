@@ -88,8 +88,11 @@ public class GzhServiceImpl implements GzhService {
     public ApiResponse aliveDevice(String cloudId, String snCode) {
         // 创建设备信息，将设备绑定至商户下面
         DeviceManage device = new DeviceManage().setCloudId(cloudId).setSnCode(snCode).setStatus(1);
-        gzhMapper.addDeviceManage(device);
-        return ApiResponse.ok();
+        Integer result = gzhMapper.addDeviceManage(device);
+        if (result > 0) {
+            return ApiResponse.ok();
+        }
+        return ApiResponse.error("提示：设备激活异常！");
     }
 
     @Override

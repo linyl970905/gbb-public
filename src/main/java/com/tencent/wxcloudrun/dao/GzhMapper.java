@@ -24,7 +24,7 @@ public interface GzhMapper {
 
     Integer createOrder(Order order);
 
-    DeviceManage addDeviceManage(DeviceManage device);
+    Integer addDeviceManage(DeviceManage device);
 
     Integer getDeviceNumByCloudId(String cloudId);
 
