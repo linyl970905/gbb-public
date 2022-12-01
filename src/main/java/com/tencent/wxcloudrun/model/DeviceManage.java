@@ -30,9 +30,6 @@ public class DeviceManage implements Serializable {
     // 是否开启保险 0-默认关闭 1-开启
     private Integer isInsure;
 
-    // 是否删除 0-未删除 1-已删除
-    private Integer isDelete;
-
     // 状态 0-未激活 1-已激活
     private Integer status;
 
