@@ -3,7 +3,7 @@
 <mapper namespace="com.tencent.wxcloudrun.dao.TerminalMapper">
 
     <select id="getDeviceBySnCode" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.DeviceManage">
-        SELECT * FROM device_manage WHERE is_delete = 0 AND sn_code = #{snCode}
+        SELECT * FROM device_manage WHERE sn_code = #{snCode}
     </select>
 
     <select id="getMerchantByCloudId" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.MerchantManage">

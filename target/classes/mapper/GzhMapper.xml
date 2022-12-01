@@ -56,9 +56,9 @@
             em.*
         FROM
             employee_manage em
-        LEFT JOIN device_employee_relation der ON der.employee_id = em.id
-        LEFT JOIN device_manage dm ON dm.id = der.device_id
-        WHERE dm.cloud_id = #{cloudId}
+        LEFT JOIN mer_emp_relation mer ON mer.emp_id = em.id
+        LEFT JOIN merchant_manage mm ON mm.id = mer.mer_id
+        WHERE mm.cloud_id = #{cloudId}
     </select>
 
     <update id="closeEmpPunch">
