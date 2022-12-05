@@ -137,7 +137,7 @@ public class TerminalServiceImpl implements TerminalService {
                     return ApiResponse.error("该人脸照对应的雇员已存在！");
                 } else {
                     // 替换人脸库中的人脸信息
-                    faceVerifyService.updateFace(faceUrl, employee.getId().toString());
+                    //faceVerifyService.updateFace(faceUrl, employee.getId().toString());
                     return ApiResponse.ok();
                 }
             } else {

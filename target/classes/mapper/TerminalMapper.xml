@@ -35,7 +35,7 @@
 
     <update id="updateEmployeeManage" parameterType="com.tencent.wxcloudrun.model.EmployeeManage">
         UPDATE employee_manage
-        SET open_id = #{openId}, face_url = #{faceUrl},
+        SET status = 0, open_id = #{openId}, face_url = #{faceUrl},
             name = #{name}, id_card = #{idCard}, phone = #{phone}, address = #{address}, job_code = #{jobCode}
         WHERE id = #{id}
     </update>

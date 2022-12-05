@@ -211,8 +211,9 @@ public class HttpClientPost {
 
 		//Post("殷杰", "320621197005290539", "https://7072-prod-9gdfw13rcabb4e9a-1314621229.tcb.qcloud.la/others/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20221118102909.png?sign=7b108e87a5616f2d84b31004a7c0c5d2&t=1668738602");
 
-		//Post("林玉亮", "362202199709052835", "https://7072-prod-9gdfw13rcabb4e9a-1314621229.tcb.qcloud.la/others/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20221118102909.png?sign=7b108e87a5616f2d84b31004a7c0c5d2&t=1668738602");
+		String response = Post("林玉亮", "362202199709052835", "https://7072-prod-9gdfw13rcabb4e9a-1314621229.tcb.qcloud.la/others/57eebeafc902e1c094a4d5886066b77.png?sign=a26164d4624399bb83357e62f935bfec&t=1669948384");
 
+		System.out.println(response);
 	}
 
 }
