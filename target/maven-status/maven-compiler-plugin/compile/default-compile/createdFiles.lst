@@ -12,6 +12,7 @@ com\tencent\wxcloudrun\model\MerEmpRelation.class
 com\tencent\wxcloudrun\utils\OrderNoType.class
 com\tencent\wxcloudrun\dao\GzhMapper.class
 com\tencent\wxcloudrun\vo\FaceInfoVO.class
+com\tencent\wxcloudrun\controller\FileUploadController.class
 com\tencent\wxcloudrun\dto\EmpRegisterDTO.class
 com\tencent\wxcloudrun\model\EmployeeManage.class
 com\tencent\wxcloudrun\vo\PunchCollectVO.class

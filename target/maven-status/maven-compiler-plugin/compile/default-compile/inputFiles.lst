@@ -40,6 +40,7 @@ E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\service\impl\GzhServ
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\service\TerminalService.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\utils\baidu\HttpUtil.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\dao\TerminalMapper.java
+E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\controller\FileUploadController.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\vo\CityAreaList.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\controller\PunchAttendController.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\model\MerEmpRelation.java

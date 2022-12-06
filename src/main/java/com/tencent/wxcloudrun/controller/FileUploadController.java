@@ -26,7 +26,7 @@ public class FileUploadController {
         requestBody.put("path", "business/1.zip");
 
 
-        HttpRequest httpRequest = HttpRequest.post("https://api.weixin.qq.com/tcb/uploadfile");
+        HttpRequest httpRequest = HttpRequest.post("https://api.weixin.qq.com/tcb/uploadfile?cloudbase_access_token=ACCESS_TOKEN");
         httpRequest.contentType("application/json");
         httpRequest.body(JSONUtil.toJsonStr(requestBody));
         httpRequest.setConnectionTimeout(18000);
@@ -51,6 +51,6 @@ public class FileUploadController {
             }
         }
 
-    }
+        }
 
 }
