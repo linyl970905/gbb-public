@@ -8,10 +8,7 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONUtil;
 import com.tencent.wxcloudrun.config.ApiResponse;
 import com.tencent.wxcloudrun.vo.uploadFile.UploadFileVO;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -74,8 +71,8 @@ public class FileUploadController {
     }
 
 
-    @GetMapping("/batchdownloadfile")
-    public ApiResponse batchdownloadfile(Array[] fileList) {
+    @PostMapping("/batchdownloadfile")
+    public ApiResponse batchdownloadfile(@RequestBody Array[] fileList) {
         // 请求参数
         Map<String, Object> requestBody = MapUtil.newHashMap();
         requestBody.put("env", "prod-9gdfw13rcabb4e9a");
