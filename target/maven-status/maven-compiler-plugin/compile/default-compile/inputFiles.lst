@@ -12,6 +12,7 @@ E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\service\impl\FaceVer
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\model\InsDayRecord.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\service\impl\PunchAttendServiceImpl.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\controller\TerminalController.java
+E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\vo\uploadFile\UploadFileVO.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\utils\baidu\FileUtil.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\vo\PunchDetailVO.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\model\Order.java

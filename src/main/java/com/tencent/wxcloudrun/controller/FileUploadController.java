@@ -4,6 +4,7 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.http.HttpException;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONUtil;
 import com.tencent.wxcloudrun.config.ApiResponse;
 import com.tencent.wxcloudrun.vo.uploadFile.UploadFileVO;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.lang.reflect.Array;
 import java.util.Map;
 
 /**
@@ -68,4 +70,41 @@ public class FileUploadController {
         }
         return ApiResponse.error("提示：请求失败！");
     }
+
+
+    @GetMapping("/batchdownloadfile")
+    public ApiResponse batchdownloadfile(Array[] fileList) {
+        // 请求参数
+        Map<String, Object> requestBody = MapUtil.newHashMap();
+        requestBody.put("env", "prod-9gdfw13rcabb4e9a");
+        requestBody.put("file_list", fileList);
+
+        // 请求上传文件链接接口
+        HttpRequest httpRequest = HttpRequest.post("https://api.weixin.qq.com/tcb/batchdownloadfile");
+        httpRequest.contentType("application/json");
+        httpRequest.body(JSONUtil.toJsonStr(requestBody));
+        httpRequest.setConnectionTimeout(18000);
+        httpRequest.setReadTimeout(20000);
+        HttpResponse execute = null;
+
+        try {
+            execute = httpRequest.execute();
+        } catch (HttpException e) {
+            e.printStackTrace();
+        }
+        if (execute == null) {
+            return ApiResponse.error("提示：请求失败！");
+        } else {
+            if (execute.isOk()) {
+                String respBody = execute.body();
+
+                cn.hutool.json.JSONObject responseJson = JSONUtil.parseObj(respBody);
+                JSONArray fileArray = responseJson.getJSONArray("file_list");
+
+                return ApiResponse.ok(fileArray);
+            }
+        }
+        return ApiResponse.error("提示：请求失败！");
+    }
+
 }
