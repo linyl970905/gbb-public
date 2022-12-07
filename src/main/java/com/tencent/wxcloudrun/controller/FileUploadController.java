@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -77,7 +79,15 @@ public class FileUploadController {
         // 请求参数
         Map<String, Object> requestBody = MapUtil.newHashMap();
         requestBody.put("env", "prod-9gdfw13rcabb4e9a");
-        requestBody.put("file_list", fileList);
+
+        List<Map<String, Object>> fileArrayList = new ArrayList<>();
+        for (int i = 0; i <= fileList.length; i++) {
+            Map<String, Object> list = MapUtil.newHashMap();
+            list.put("fileid", fileList[i]);
+            list.put("max_age", 7200);
+            fileArrayList.add(list);
+        }
+        requestBody.put("file_list", fileArrayList);
 
         // 请求上传文件链接接口
         HttpRequest httpRequest = HttpRequest.post("https://api.weixin.qq.com/tcb/batchdownloadfile");
