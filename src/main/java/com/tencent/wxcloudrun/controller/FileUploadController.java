@@ -10,7 +10,6 @@ import com.tencent.wxcloudrun.config.ApiResponse;
 import com.tencent.wxcloudrun.vo.uploadFile.UploadFileVO;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -71,16 +70,17 @@ public class FileUploadController {
     }
 
 
-    @PostMapping("/batchdownloadfile")
-    public ApiResponse batchdownloadfile(@RequestBody Array[] fileList) {
+    @GetMapping("/batchdownloadfile")
+    public ApiResponse batchdownloadfile(@RequestParam String fileList) {
         // 请求参数
         Map<String, Object> requestBody = MapUtil.newHashMap();
         requestBody.put("env", "prod-9gdfw13rcabb4e9a");
 
         List<Map<String, Object>> fileArrayList = new ArrayList<>();
-        for (int i = 0; i <= fileList.length; i++) {
+        String[] fileArray = fileList.split(",");
+        for (int i = 0; i < fileArray.length; i++) {
             Map<String, Object> list = MapUtil.newHashMap();
-            list.put("fileid", fileList[i]);
+            list.put("fileid", fileArray[i]);
             list.put("max_age", 7200);
             fileArrayList.add(list);
         }
@@ -106,12 +106,11 @@ public class FileUploadController {
                 String respBody = execute.body();
 
                 cn.hutool.json.JSONObject responseJson = JSONUtil.parseObj(respBody);
-                JSONArray fileArray = responseJson.getJSONArray("file_list");
+                JSONArray resultList = responseJson.getJSONArray("file_list");
 
-                return ApiResponse.ok(fileArray);
+                return ApiResponse.ok(resultList);
             }
         }
         return ApiResponse.error("提示：请求失败！");
     }
-
 }
