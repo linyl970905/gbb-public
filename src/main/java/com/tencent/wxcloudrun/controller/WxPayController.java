@@ -33,6 +33,10 @@ public class WxPayController {
         requestBody.put("sub_mch_id", "1633720711");
         requestBody.put("total_fee", 100);
         requestBody.put("callback_type", 2);
+        Map<String, Object> container = MapUtil.newHashMap();
+        container.put("service", "pay");
+        container.put("path", "/");
+        requestBody.put("container", container);
 
         // 请求上传文件链接接口
         HttpRequest httpRequest = HttpRequest.post("http://api.weixin.qq.com/_/pay/unifiedorder");
@@ -53,7 +57,7 @@ public class WxPayController {
             if (execute.isOk()) {
                 String respBody = execute.body();
 
-                return ApiResponse.ok(requestBody);
+                return ApiResponse.ok(respBody);
             }
         }
         return ApiResponse.error("提示：请求失败！");
