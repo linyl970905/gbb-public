@@ -7,6 +7,7 @@ import com.tencent.wxcloudrun.model.MerchantManage;
 import com.tencent.wxcloudrun.model.Order;
 import com.tencent.wxcloudrun.vo.ProvinceCityList;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -16,13 +17,15 @@ import java.util.List;
  */
 public interface GzhService {
 
+    ApiResponse getRequestHeader(HttpServletRequest request);
+
     ApiResponse registerLogin(String cloudId);
 
     List<ProvinceCityList> getAllArea();
 
     ApiResponse createOrder(Order order);
 
-    ApiResponse aliveDevice(String cloudId, String snCode);
+    ApiResponse aliveDevice(String cloudId, String snCode, String name);
 
     ApiResponse getMerchantByCloudId(String cloudId);
 
@@ -41,4 +44,6 @@ public interface GzhService {
     void closeDevicePunch(Integer id, Integer isPunch);
 
     void closeDeviceInsure(Integer id, Integer isInsure);
+
+    void delDevice(Integer id);
 }

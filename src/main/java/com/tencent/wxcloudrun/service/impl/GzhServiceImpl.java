@@ -2,6 +2,7 @@ package com.tencent.wxcloudrun.service.impl;
 
 import com.tencent.wxcloudrun.config.ApiResponse;
 import com.tencent.wxcloudrun.dao.GzhMapper;
+import com.tencent.wxcloudrun.dao.PunchAttendMapper;
 import com.tencent.wxcloudrun.model.*;
 import com.tencent.wxcloudrun.service.GzhService;
 import com.tencent.wxcloudrun.utils.OrderNoType;
@@ -10,9 +11,11 @@ import com.tencent.wxcloudrun.vo.MerchantDetailVO;
 import com.tencent.wxcloudrun.vo.ProvinceCityList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 /**
  * @Author: zero
@@ -25,13 +28,45 @@ public class GzhServiceImpl implements GzhService {
     @Autowired
     private GzhMapper gzhMapper;
 
+    @Autowired
+    private PunchAttendMapper punchAttendMapper;
+
+    @Override
+    public ApiResponse getRequestHeader(HttpServletRequest request) {
+        request = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest();
+        Enumeration<String> headerNames = request.getHeaderNames();
+        Map<String, String> headerMap = new HashMap<>(8);
+        while (headerNames.hasMoreElements()) {
+            String name = headerNames.nextElement();
+            headerMap.put(name, request.getHeader(name));
+        }
+
+        return ApiResponse.ok(headerMap);
+    }
+
     @Override
     public ApiResponse registerLogin(String cloudId) {
         // 1.根据cloudId判断是否存在该用户
         MerchantManage merchant = gzhMapper.getMerchantByCloudId(cloudId);
         if (merchant == null) {
             // 2.不存在时--执行新增操作
-            gzhMapper.addMerchantManage(cloudId);
+            merchant.setCloudId(cloudId);
+            Integer result = gzhMapper.addMerchantManage(merchant);
+            if (result > 0) {
+                // 新创建的公众号同步生成打卡规则
+                PunchAttendRule rule = new PunchAttendRule()
+                        .setMerId(merchant.getId())
+                        .setPunchType(1)
+                        .setOneStartTime("08:30")
+                        .setOneNormalTime("09:00")
+                        .setOneEndTime("09:30")
+                        .setTwoStartTime("17:30")
+                        .setTwoNormalTime("18:00")
+                        .setTwoEndTime("18:30");
+                punchAttendMapper.addPunchAttendRule(rule);
+            } else {
+                return ApiResponse.error("提示：创建公众号账户失败！");
+            }
         }
         return ApiResponse.ok();
     }
@@ -85,7 +120,7 @@ public class GzhServiceImpl implements GzhService {
     }
 
     @Override
-    public ApiResponse aliveDevice(String cloudId, String snCode) {
+    public ApiResponse aliveDevice(String cloudId, String snCode, String name) {
         // 查询该设备是否已激活
         DeviceManage device = gzhMapper.getDeviceBySnCode(snCode);
         if (device != null) {
@@ -93,7 +128,7 @@ public class GzhServiceImpl implements GzhService {
         }
 
         // 创建设备信息，将设备绑定至商户下面
-        DeviceManage addDevice = new DeviceManage().setCloudId(cloudId).setSnCode(snCode).setStatus(1);
+        DeviceManage addDevice = new DeviceManage().setCloudId(cloudId).setSnCode(snCode).setName(name).setStatus(1);
         Integer result = gzhMapper.addDeviceManage(addDevice);
         if (result > 0) {
             return ApiResponse.ok();
@@ -168,5 +203,10 @@ public class GzhServiceImpl implements GzhService {
     @Override
     public void closeDeviceInsure(Integer id, Integer isInsure) {
         gzhMapper.closeDeviceInsure(id, isInsure);
+    }
+
+    @Override
+    public void delDevice(Integer id) {
+        gzhMapper.delDevice(id);
     }
 }

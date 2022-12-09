@@ -31,13 +31,13 @@ public class PunchAttendController implements Serializable {
     }
 
     /**
-     * 新增打卡考勤规则
+     * 编辑打卡考勤规则
      * @param rule
      * @return
      */
-    @PostMapping("/addRule")
-    public ApiResponse addRule(@RequestBody PunchAttendRule rule) {
-        punchAttendService.addRule(rule);
+    @PostMapping("/updatePunchAttendRule")
+    public ApiResponse updatePunchAttendRule(@RequestBody PunchAttendRule rule) {
+        punchAttendService.updatePunchAttendRule(rule);
         return ApiResponse.ok();
     }
 

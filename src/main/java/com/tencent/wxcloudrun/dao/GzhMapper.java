@@ -14,7 +14,7 @@ public interface GzhMapper {
 
     MerchantManage getMerchantByCloudId(String cloudId);
 
-    void addMerchantManage(String cloudId);
+    Integer addMerchantManage(MerchantManage merchant);
 
     List<Province> getProvince();
 
@@ -47,4 +47,6 @@ public interface GzhMapper {
     void closeDevicePunch(@Param("id") Integer id, @Param("isPunch") Integer isPunch);
 
     void closeDeviceInsure(@Param("id") Integer id, @Param("isInsure") Integer isInsure);
+
+    void delDevice(Integer id);
 }

@@ -41,6 +41,10 @@ public interface PunchAttendMapper {
 
     List<PunchCollectVO> getPunchEmpList(Integer merId);
 
+    void addPunchAttendRule(PunchAttendRule rule);
+
+    void updatePunchAttendRule(PunchAttendRule rule);
+
     Integer getAllDays(@Param("merId") Integer merId, @Param("empId") Integer empId, @Param("yearMonth") String yearMonth);
 
     Integer getLateDays(@Param("merId") Integer merId, @Param("empId") Integer empId, @Param("yearMonth") String yearMonth);

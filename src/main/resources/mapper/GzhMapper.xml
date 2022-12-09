@@ -6,7 +6,8 @@
         SELECT * FROM merchant_manage WHERE cloud_id = #{cloudId}
     </select>
 
-    <insert id="addMerchantManage" parameterType="java.lang.String">
+    <insert id="addMerchantManage" parameterType="com.tencent.wxcloudrun.model.MerchantManage"
+            keyProperty="id" useGeneratedKeys="true">
         INSERT INTO merchant_manage (cloud_id) VALUES (#{cloudId})
     </insert>
 
@@ -32,8 +33,8 @@
     </select>
 
     <insert id="addDeviceManage" parameterType="com.tencent.wxcloudrun.model.DeviceManage">
-        INSERT INTO device_manage (cloud_id, sn_code, status)
-        VALUES (#{cloudId}, #{snCode}, 1)
+        INSERT INTO device_manage (cloud_id, sn_code, name, status)
+        VALUES (#{cloudId}, #{snCode}, #{name}, 1)
     </insert>
 
     <select id="getDeviceNumByCloudId" parameterType="java.lang.String" resultType="java.lang.Integer">
@@ -74,7 +75,7 @@
     </delete>
 
     <select id="getDeviceList" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.DeviceManage">
-        SELECT * FROM device_manage WHERE cloud_id = #{cloudId}
+        SELECT * FROM device_manage WHERE status = 1 AND cloud_id = #{cloudId}
     </select>
 
     <update id="closeDevicePunch">
@@ -84,4 +85,8 @@
     <update id="closeDeviceInsure">
         UPDATE device_manage set is_insure = #{isInsure} WHERE id = #{id}
     </update>
+
+    <delete id="delDevice" parameterType="java.lang.Integer">
+        delete * from device_manage WHERE id = #{id}
+    </delete>
 </mapper>

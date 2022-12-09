@@ -39,8 +39,8 @@ public class PunchAttendServiceImpl implements PunchAttendService {
     }
 
     @Override
-    public void addRule(PunchAttendRule rule) {
-        punchAttendMapper.addRule(rule);
+    public void updatePunchAttendRule(PunchAttendRule rule) {
+        punchAttendMapper.updatePunchAttendRule(rule);
     }
 
     @Override

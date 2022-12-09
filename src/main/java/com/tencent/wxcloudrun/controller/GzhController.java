@@ -7,6 +7,7 @@ import com.tencent.wxcloudrun.service.GzhService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 
 /**
@@ -20,6 +21,11 @@ public class GzhController implements Serializable {
 
     @Autowired
     private GzhService gzhService;
+
+    @GetMapping("/getRequestHeader")
+    public ApiResponse getRequestHeader(HttpServletRequest request) {
+        return gzhService.getRequestHeader(request);
+    }
 
     /**
      * 公众号注册/登录
@@ -57,8 +63,8 @@ public class GzhController implements Serializable {
      * @return
      */
     @GetMapping("/aliveDevice")
-    public ApiResponse aliveDevice(@RequestParam String cloudId, @RequestParam String snCode) {
-        return gzhService.aliveDevice(cloudId, snCode);
+    public ApiResponse aliveDevice(@RequestParam String cloudId, @RequestParam String snCode, @RequestParam String name) {
+        return gzhService.aliveDevice(cloudId, snCode, name);
     }
 
     /**
@@ -158,6 +164,17 @@ public class GzhController implements Serializable {
     @GetMapping("/closeDeviceInsure")
     public ApiResponse closeDeviceInsure(@RequestParam Integer id, @RequestParam Integer isInsure) {
         gzhService.closeDeviceInsure(id, isInsure);
+        return ApiResponse.ok();
+    }
+
+    /**
+     * 设备-删除
+     * @param id
+     * @return
+     */
+    @GetMapping("/delDevice")
+    public ApiResponse delDevice(@RequestParam Integer id) {
+        gzhService.delDevice(id);
         return ApiResponse.ok();
     }
 }

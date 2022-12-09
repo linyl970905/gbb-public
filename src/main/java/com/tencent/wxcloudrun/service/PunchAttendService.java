@@ -16,7 +16,7 @@ public interface PunchAttendService {
 
     PunchAttendRule getRuleByMerId(Integer merId);
 
-    void addRule(PunchAttendRule rule);
+    void updatePunchAttendRule(PunchAttendRule rule);
 
     ApiResponse punchAttend(String snCode, String userId);
 
