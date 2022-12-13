@@ -5,17 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5a8d8e1b-9f90-40ad-8060-76d28a265733" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/controller/GzhController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/controller/GzhController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/controller/PunchAttendController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/controller/PunchAttendController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/dao/GzhMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/dao/GzhMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/dao/PunchAttendMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/dao/PunchAttendMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/model/DeviceManage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/model/DeviceManage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/service/GzhService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/service/GzhService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/service/PunchAttendService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/service/PunchAttendService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/service/impl/GzhServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/service/impl/GzhServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/controller/AuthorizeController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/utils/IpAddressUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/utils/JsapiTicketUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/utils/WxJsapiTicket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/controller/WxPayController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/controller/WxPayController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/service/impl/PunchAttendServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/service/impl/PunchAttendServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mapper/GzhMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mapper/GzhMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mapper/PunchAttendMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mapper/PunchAttendMapper.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +32,7 @@
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="mavenHome" value="E:\Java-Develop\Maven\apache-maven-3.3.9" />
+        <option name="mavenHome" value="$PROJECT_DIR$/../../Java-Develop/Maven/apache-maven-3.3.9" />
         <option name="userSettingsFile" value="E:\Java-Develop\Maven\apache-maven-3.3.9\conf\settings.xml" />
       </MavenGeneralSettings>
     </option>
@@ -53,9 +49,9 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.tencent.wxcloudrun.utils" />
       <recent name="com.tencent.wxcloudrun.model" />
       <recent name="com.tencent.wxcloudrun.utils.picc" />
-      <recent name="com.tencent.wxcloudrun.utils" />
       <recent name="com.tencent.wxcloudrun.dao" />
       <recent name="com.tencent.wxcloudrun.controller" />
     </key>
@@ -65,7 +61,7 @@
       <recent name="E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\utils" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.WxCloudRunApplication">
+  <component name="RunManager" selected="Application.WxPayController">
     <configuration name="FileUploadController" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.tencent.wxcloudrun.controller.FileUploadController" />
       <module name="springboot-wxcloudrun" />
@@ -92,8 +88,22 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="WxPayController" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.tencent.wxcloudrun.controller.WxPayController" />
+      <module name="springboot-wxcloudrun" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.tencent.wxcloudrun.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.WxPayController" />
         <item itemvalue="Application.WxCloudRunApplication" />
         <item itemvalue="Application.FileUploadController" />
       </list>
@@ -131,50 +141,50 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="607" y="166" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1666769197102" />
-    <state width="1493" height="301" key="GridCell.Tab.0.bottom" timestamp="1670493547519">
+    <state width="1493" height="301" key="GridCell.Tab.0.bottom" timestamp="1670900768305">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="301" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1670493547519" />
-    <state width="1493" height="301" key="GridCell.Tab.0.center" timestamp="1670493547519">
+    <state width="1493" height="301" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1670900768305" />
+    <state width="1493" height="301" key="GridCell.Tab.0.center" timestamp="1670900768305">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="301" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1670493547519" />
-    <state width="1493" height="301" key="GridCell.Tab.0.left" timestamp="1670493547519">
+    <state width="1493" height="301" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1670900768305" />
+    <state width="1493" height="301" key="GridCell.Tab.0.left" timestamp="1670900768305">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="301" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1670493547519" />
-    <state width="1493" height="301" key="GridCell.Tab.0.right" timestamp="1670493547519">
+    <state width="1493" height="301" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1670900768305" />
+    <state width="1493" height="301" key="GridCell.Tab.0.right" timestamp="1670900768305">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="301" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1670493547519" />
-    <state width="1493" height="301" key="GridCell.Tab.1.bottom" timestamp="1670493547519">
+    <state width="1493" height="301" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1670900768305" />
+    <state width="1493" height="301" key="GridCell.Tab.1.bottom" timestamp="1670900768305">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="301" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1670493547519" />
-    <state width="1493" height="301" key="GridCell.Tab.1.center" timestamp="1670493547519">
+    <state width="1493" height="301" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1670900768305" />
+    <state width="1493" height="301" key="GridCell.Tab.1.center" timestamp="1670900768305">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="301" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1670493547519" />
-    <state width="1493" height="301" key="GridCell.Tab.1.left" timestamp="1670493547519">
+    <state width="1493" height="301" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1670900768305" />
+    <state width="1493" height="301" key="GridCell.Tab.1.left" timestamp="1670900768305">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="301" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1670493547519" />
-    <state width="1493" height="301" key="GridCell.Tab.1.right" timestamp="1670493547519">
+    <state width="1493" height="301" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1670900768305" />
+    <state width="1493" height="301" key="GridCell.Tab.1.right" timestamp="1670900768305">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="301" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1670493547519" />
-    <state x="349" y="146" key="IDE.errors.dialog" timestamp="1670568534256">
+    <state width="1493" height="301" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1670900768305" />
+    <state x="349" y="146" key="IDE.errors.dialog" timestamp="1670914707059">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="349" y="146" key="IDE.errors.dialog/0.0.1536.824@0.0.1536.824" timestamp="1670568534256" />
+    <state x="349" y="146" key="IDE.errors.dialog/0.0.1536.824@0.0.1536.824" timestamp="1670914707059" />
     <state x="299" y="67" key="Maven.ArtifactSearchDialog" timestamp="1668501347293">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="299" y="67" key="Maven.ArtifactSearchDialog/0.0.1536.824@0.0.1536.824" timestamp="1668501347293" />
-    <state x="270" y="56" width="1113" height="711" key="SettingsEditor" timestamp="1670225110275">
+    <state x="270" y="56" width="1113" height="711" key="SettingsEditor" timestamp="1670913808889">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="270" y="56" width="1113" height="711" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1670225110275" />
+    <state x="270" y="56" width="1113" height="711" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1670913808889" />
     <state x="467" y="115" width="602" height="594" key="find.popup" timestamp="1670224418140">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

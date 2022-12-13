@@ -79,6 +79,48 @@
         WHERE mer.mer_id = #{merId}
     </select>
 
+    <insert id="addPunchAttendRule" parameterType="com.tencent.wxcloudrun.model.PunchAttendRule">
+        INSERT INTO punch_attend_rule
+            (
+             mer_id, punch_type, one_start_time, one_normal_time, one_end_time, two_start_time, two_normal_time,
+             two_end_time, three_start_time, three_normal_time, three_end_time, four_start_time, four_normal_time,
+             four_end_time, five_start_time, five_normal_time, five_end_time, six_start_time, six_normal_time, six_end_time, create_time
+            )
+        VALUES
+            (
+             #{merId}, #{punchType}, #{oneStartTime}, #{oneNormalTime}, #{oneEndTime}, #{twoStartTime}, #{twoNormalTime},
+             #{twoEndTime}, #{threeStartTime}, #{threeNormalTime}, #{threeEndTime}, #{fourStartTime}, #{fourNormalTime},
+             #{fourEndTime}, #{fiveStartTime}, #{fiveNormalTime}, #{fiveEndTime}, #{sixStartTime}, #{sixNormalTime}, #{sixEndTime}, NOW()
+            )
+    </insert>
+
+    <update id="updatePunchAttendRule" parameterType="com.tencent.wxcloudrun.model.PunchAttendRule">
+        UPDATE
+            punch_attend_rule
+        SET
+            mer_id = #{merId},
+            punch_type = #{punchType},
+            one_start_time = #{oneStartTime},
+            one_normal_time = #{oneNormalTime},
+            one_end_time = #{oneEndTime},
+            two_start_time = #{twoStartTime},
+            two_normal_time = #{twoNormalTime},
+            two_end_time = #{twoEndTime},
+            three_start_time = #{threeStartTime},
+            three_normal_time = #{threeNormalTime},
+            three_end_time = #{threeEndTime},
+            four_start_time = #{fourStartTime},
+            four_normal_time = #{fourNormalTime},
+            four_end_time = #{fourEndTime},
+            five_start_time = #{fiveStartTime},
+            five_normal_time = #{fiveNormalTime},
+            five_end_time = #{fiveEndTime},
+            six_start_time = #{sixStartTime},
+            six_normal_time = #{sixNormalTime},
+            six_end_time = #{sixEndTime},
+        WHERE id = #{id}
+    </update>
+
     <select id="getAllDays" resultType="java.lang.Integer">
         SELECT DATE_FORMAT(create_time, '%Y-%M'), count(1) FROM punch_attend_record
         WHERE status != 0 AND mer_id = #{merId} AND emp_id = #{empId}

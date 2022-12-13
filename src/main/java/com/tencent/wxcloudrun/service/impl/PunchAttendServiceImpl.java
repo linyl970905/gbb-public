@@ -85,6 +85,7 @@ public class PunchAttendServiceImpl implements PunchAttendService {
                             .setPhone(employee.getPhone())
                             .setAddress(employee.getAddress())
                             .setJobCode(employee.getJobCode())
+                            .setPunchType(punchType)
                             .setStatus(0)
                             .setCreateTime(nowTime);
 
@@ -148,6 +149,7 @@ public class PunchAttendServiceImpl implements PunchAttendService {
                             .setPhone(employee.getPhone())
                             .setAddress(employee.getAddress())
                             .setJobCode(employee.getJobCode())
+                            .setPunchType(punchType)
                             .setStatus(0)
                             .setCreateTime(nowTime);
 
@@ -249,6 +251,7 @@ public class PunchAttendServiceImpl implements PunchAttendService {
                             .setPhone(employee.getPhone())
                             .setAddress(employee.getAddress())
                             .setJobCode(employee.getJobCode())
+                            .setPunchType(punchType)
                             .setStatus(0)
                             .setCreateTime(nowTime);
 
@@ -358,14 +361,14 @@ public class PunchAttendServiceImpl implements PunchAttendService {
                     } else if (nowTime.after(sixStartTime) && nowTime.before(sixNormalTime)) {
                         Integer ztNum = punchAttendMapper.getNumByTime(merchant.getId(), employee.getId(), 3, sixStartTime, sixNormalTime);
                         if (ztNum > 0) {
-                            punchAttendMapper.syncPunchStatus(merchant.getId(), employee.getId(), 0, fourStartTime, fourNormalTime);
+                            punchAttendMapper.syncPunchStatus(merchant.getId(), employee.getId(), 0, sixStartTime, sixNormalTime);
                         }
                         record.setStatus(3);
                     } else if (nowTime.after(sixNormalTime) && nowTime.before(sixEndTime)) {
                         Integer asNum = punchAttendMapper.getNumByTime(merchant.getId(), employee.getId(), 1, sixNormalTime, sixEndTime);
                         Integer ztNum = punchAttendMapper.getNumByTime(merchant.getId(), employee.getId(), 3, sixStartTime, sixNormalTime);
                         if (asNum > 0 || ztNum > 0) {
-                            punchAttendMapper.syncPunchStatus(merchant.getId(), employee.getId(), 0, fourStartTime, fourEndTime);
+                            punchAttendMapper.syncPunchStatus(merchant.getId(), employee.getId(), 0, sixStartTime, sixEndTime);
                         }
                         record.setStatus(1);
                     } else if (nowTime.after(sixEndTime)) {

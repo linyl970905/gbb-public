@@ -1,6 +1,7 @@
 com\tencent\wxcloudrun\config\ApiResponse.class
 com\tencent\wxcloudrun\dao\TerminalMapper.class
 com\tencent\wxcloudrun\vo\MerchantDetailVO.class
+com\tencent\wxcloudrun\utils\IpAddressUtil.class
 com\tencent\wxcloudrun\vo\uploadFile\UploadFileVO.class
 com\tencent\wxcloudrun\utils\baidu\FileUtil.class
 com\tencent\wxcloudrun\controller\GzhController.class
