@@ -11,10 +11,12 @@ import com.tencent.wxcloudrun.vo.MerchantDetailVO;
 import com.tencent.wxcloudrun.vo.ProvinceCityList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -208,5 +210,28 @@ public class GzhServiceImpl implements GzhService {
     @Override
     public void delDevice(Integer id) {
         gzhMapper.delDevice(id);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void addRechargeBalance(String cloudId, BigDecimal rechargeAmount) {
+        // 1.获取商户管理信息
+        MerchantManage merchant = gzhMapper.getMerchantByCloudId(cloudId);
+        if (merchant != null) {
+            // 2.执行增加余额操作
+            gzhMapper.updateBalance(merchant.getId(), rechargeAmount);
+            // 3.增加充值记录
+            RechargeRecord record = new RechargeRecord()
+                    .setCloudId(cloudId)
+                    .setRechargeAmount(rechargeAmount)
+                    .setBeforeBalance(merchant.getBalance())
+                    .setAfterBalance(merchant.getBalance().add(rechargeAmount));
+            gzhMapper.addRechargeRecord(record);
+        }
+    }
+
+    @Override
+    public List<RechargeRecord> getRechargeRecordList(String cloudId) {
+        return gzhMapper.getRechargeRecordList(cloudId);
     }
 }

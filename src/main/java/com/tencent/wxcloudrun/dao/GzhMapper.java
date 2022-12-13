@@ -3,6 +3,7 @@ package com.tencent.wxcloudrun.dao;
 import com.tencent.wxcloudrun.model.*;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -49,4 +50,10 @@ public interface GzhMapper {
     void closeDeviceInsure(@Param("id") Integer id, @Param("isInsure") Integer isInsure);
 
     void delDevice(Integer id);
+
+    Integer updateBalance(@Param("id") Integer id, @Param("rechargeAmount") BigDecimal rechargeAmount);
+
+    void addRechargeRecord(RechargeRecord record);
+
+    List<RechargeRecord> getRechargeRecordList(String cloudId);
 }

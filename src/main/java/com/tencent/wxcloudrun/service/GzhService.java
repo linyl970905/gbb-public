@@ -1,13 +1,11 @@
 package com.tencent.wxcloudrun.service;
 
 import com.tencent.wxcloudrun.config.ApiResponse;
-import com.tencent.wxcloudrun.model.DeviceManage;
-import com.tencent.wxcloudrun.model.EmployeeManage;
-import com.tencent.wxcloudrun.model.MerchantManage;
-import com.tencent.wxcloudrun.model.Order;
+import com.tencent.wxcloudrun.model.*;
 import com.tencent.wxcloudrun.vo.ProvinceCityList;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -46,4 +44,8 @@ public interface GzhService {
     void closeDeviceInsure(Integer id, Integer isInsure);
 
     void delDevice(Integer id);
+
+    void addRechargeBalance(String cloudId, BigDecimal rechargeAmount);
+
+    List<RechargeRecord> getRechargeRecordList(String cloudId);
 }

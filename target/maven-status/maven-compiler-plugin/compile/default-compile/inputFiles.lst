@@ -4,6 +4,7 @@ E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\dto\EmpRegisterDTO.j
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\service\FaceVerifyService.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\service\impl\FaceVerifyServiceImpl.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\service\impl\PunchAttendServiceImpl.java
+E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\utils\WxJsapiTicket.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\vo\uploadFile\UploadFileVO.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\utils\baidu\FileUtil.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\utils\baidu\FaceAPIConstants.java
@@ -35,6 +36,7 @@ E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\utils\picc\CryptoUti
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\WxCloudRunApplication.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\dao\GzhMapper.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\model\PunchAttendRule.java
+E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\utils\JsapiTicketUtil.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\vo\EmployeePageVO.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\vo\ProvinceCityList.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\config\ApiResponse.java
@@ -45,5 +47,6 @@ E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\vo\PunchArrayVO.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\service\impl\GzhServiceImpl.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\dao\TerminalMapper.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\controller\FileUploadController.java
+E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\controller\AuthorizeController.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\controller\PunchAttendController.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\model\MerEmpRelation.java

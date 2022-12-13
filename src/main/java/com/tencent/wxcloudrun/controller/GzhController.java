@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * @Author: zero
@@ -176,5 +177,27 @@ public class GzhController implements Serializable {
     public ApiResponse delDevice(@RequestParam Integer id) {
         gzhService.delDevice(id);
         return ApiResponse.ok();
+    }
+
+    /**
+     * 充值-账户余额
+     * @param cloudId
+     * @param rechargeAmount
+     * @return
+     */
+    @GetMapping("/addRechargeBalance")
+    public ApiResponse addRechargeBalance(@RequestParam String cloudId, @RequestParam BigDecimal rechargeAmount) {
+        gzhService.addRechargeBalance(cloudId, rechargeAmount);
+        return ApiResponse.ok();
+    }
+
+    /**
+     * 充值-获取充值列表
+     * @param cloudId
+     * @return
+     */
+    @GetMapping("/getRechargeRecordList")
+    public ApiResponse getRechargeRecordList(@RequestParam String cloudId) {
+        return ApiResponse.ok(gzhService.getRechargeRecordList(cloudId));
     }
 }

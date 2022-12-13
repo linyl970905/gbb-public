@@ -35,7 +35,9 @@ com\tencent\wxcloudrun\utils\zhengmian\NameHttpClientPost.class
 com\tencent\wxcloudrun\controller\PunchAttendController.class
 com\tencent\wxcloudrun\dao\PunchAttendMapper.class
 com\tencent\wxcloudrun\model\PunchAttendRecord.class
+com\tencent\wxcloudrun\utils\JsapiTicketUtil.class
 com\tencent\wxcloudrun\utils\zhengmian\HttpClientPost.class
+com\tencent\wxcloudrun\controller\AuthorizeController.class
 com\tencent\wxcloudrun\utils\zhengmian\NameHttpClientPost$1.class
 com\tencent\wxcloudrun\model\MerchantManage.class
 com\tencent\wxcloudrun\model\City.class
@@ -47,5 +49,6 @@ com\tencent\wxcloudrun\vo\EmployeePageVO.class
 com\tencent\wxcloudrun\vo\ProvinceCityList.class
 com\tencent\wxcloudrun\service\GzhService.class
 com\tencent\wxcloudrun\model\Area.class
+com\tencent\wxcloudrun\utils\WxJsapiTicket.class
 com\tencent\wxcloudrun\utils\zhengmian\HttpClientPost$1.class
 com\tencent\wxcloudrun\service\TerminalService.class

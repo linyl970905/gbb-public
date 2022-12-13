@@ -89,4 +89,17 @@
     <delete id="delDevice" parameterType="java.lang.Integer">
         delete * from device_manage WHERE id = #{id}
     </delete>
+
+    <update id="updateBalance">
+        UPDATE merchant_manage SET balance = balance + #{rechargeAmount} WHERE id = #{id}
+    </update>
+
+    <insert id="addRechargeRecord" parameterType="com.tencent.wxcloudrun.model.RechargeRecord">
+        INSERT INTO recharge_record (mer_id, recharge_amount, before_balance, after_balance, create_time)
+        VALUES (#{merId}, #{rechargeAmount}, #{beforeBalance}, #{afterBalance}, NOW())
+    </insert>
+
+    <select id="getRechargeRecordList" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.RechargeRecord">
+        SELECT * FROM recharge_record WHERE cloud_id = #{cloudId} ORDER BY create_time DESC
+    </select>
 </mapper>
