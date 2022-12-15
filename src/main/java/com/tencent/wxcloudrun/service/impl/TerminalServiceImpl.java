@@ -5,6 +5,7 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.tencent.wxcloudrun.config.ApiResponse;
+import com.tencent.wxcloudrun.config.ResultMsg;
 import com.tencent.wxcloudrun.dao.PunchAttendMapper;
 import com.tencent.wxcloudrun.dao.TerminalMapper;
 import com.tencent.wxcloudrun.dto.EmpRegisterDTO;
@@ -12,9 +13,9 @@ import com.tencent.wxcloudrun.model.*;
 import com.tencent.wxcloudrun.service.FaceVerifyService;
 import com.tencent.wxcloudrun.service.PunchAttendService;
 import com.tencent.wxcloudrun.service.TerminalService;
+import com.tencent.wxcloudrun.utils.RSAUtils;
 import com.tencent.wxcloudrun.utils.zhengmian.HttpClientPost;
 import com.tencent.wxcloudrun.vo.EmployeePageVO;
-import com.tencent.wxcloudrun.vo.FaceInfoVO;
 import com.tencent.wxcloudrun.vo.PunchArrayVO;
 import com.tencent.wxcloudrun.vo.PunchDetailVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Author: zero
@@ -49,65 +47,92 @@ public class TerminalServiceImpl implements TerminalService {
     private PunchAttendService punchAttendService;
 
     @Override
-    public ApiResponse getDeviceBySnCode(String snCode) {
-        // 根据sn码查询设备状态
-        DeviceManage device = terminalMapper.getDeviceBySnCode(snCode);
-        if (device == null) {
-            return ApiResponse.responseData(201, "未查询到设备，请激活后使用！", "");
-        } else if (device.getStatus() == 0) {
-            return ApiResponse.responseData(201, "未查询到设备，请激活后使用！", "");
-        } else {
-            return ApiResponse.responseData(200, "设备已激活！", "");
+    public ResultMsg getDeviceBySnCode(String requestJson) {
+        // 解密请求json--获取snCode
+        try {
+            String json = RSAUtils.getDecodedData(requestJson);
+            cn.hutool.json.JSONObject result = JSONUtil.parseObj(json);
+            String snCode = result.getStr("snCode");
+
+            // 根据sn码查询设备状态
+            DeviceManage device = terminalMapper.getDeviceBySnCode(snCode);
+            if (device == null) {
+                return ResultMsg.respData(101, "未查询到设备信息！", null);
+            } else if (device.getStatus() == 0) {
+                return ResultMsg.respData(102, "设备未激活！", null);
+            } else {
+                return ResultMsg.respData(0, "成功！", null);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return ResultMsg.respData(999, "接口异常！", null);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ApiResponse operaPunch(String snCode, String faceUrl) throws Exception {
-        // 0.根据sn码查询设备信息、商户信息
-        DeviceManage device = terminalMapper.getDeviceBySnCode(snCode);
-        MerchantManage merchant = terminalMapper.getMerchantByCloudId(device.getCloudId());
+    public ResultMsg operaPunch(String requestJson) throws Exception {
+        // 解密请求json--获取snCode
+        try {
+            String json = RSAUtils.getDecodedData(requestJson);
+            cn.hutool.json.JSONObject result = JSONUtil.parseObj(json);
+            String snCode = result.getStr("snCode");
+            String faceUrl = result.getStr("faceUrl");
 
-        // 1.使用终端人脸照与百度人脸库数据进行对比，返回比对值score
-        String response = faceVerifyService.searchFace(faceUrl);
-        if (response == null) {
-            return ApiResponse.responseData(201, "对比百度智能云人脸识别异常！", "");
-        } else {
-            cn.hutool.json.JSONObject responseJson = JSONUtil.parseObj(response);
-            String result = responseJson.getStr("result");
-            cn.hutool.json.JSONObject resultJson = JSONUtil.parseObj(result);
-            JSONArray userList = resultJson.getJSONArray("user_list");
-            if (userList != null) {
-                JSONObject parseObj = JSONUtil.parseObj(userList.get(0));
-                String userId = parseObj.getStr("user_id");
-                int score = NumberUtil.parseInt(parseObj.getStr("score"));
-                if (score >= 85) { // 人脸比对值：85%相似度
-                    // 查询该用户绑定的商户
-                    Integer checkRelation = terminalMapper.checkRelation(merchant.getId(), Integer.valueOf(userId));
-                    if(checkRelation > 0) {
-                        // 执行打卡操作
-                        punchAttendService.punchAttend(snCode, userId);
-                        // 执行投保操作
-                        punchAttendService.insureApply(snCode, userId);
+            // 0.根据sn码查询设备信息、商户信息
+            DeviceManage device = terminalMapper.getDeviceBySnCode(snCode);
+            MerchantManage merchant = terminalMapper.getMerchantByCloudId(device.getCloudId());
 
-                        return ApiResponse.responseData(200, "打卡成功！", "");
+            // 1.使用终端人脸照与百度人脸库数据进行对比，返回比对值score
+            String response = faceVerifyService.searchFace(faceUrl);
+            if (response == null) {
+                return ResultMsg.respData(201, "对比百度智能云人脸识别异常！", null);
+            } else {
+                cn.hutool.json.JSONObject responseJson = JSONUtil.parseObj(response);
+                String resultStr = responseJson.getStr("result");
+                cn.hutool.json.JSONObject resultJson = JSONUtil.parseObj(resultStr);
+                JSONArray userList = resultJson.getJSONArray("user_list");
+                if (userList != null) {
+                    JSONObject parseObj = JSONUtil.parseObj(userList.get(0));
+                    String userId = parseObj.getStr("user_id");
+                    int score = NumberUtil.parseInt(parseObj.getStr("score"));
+                    if (score >= 85) { // 人脸比对值：85%相似度
+                        // 查询该用户绑定的商户
+                        Integer checkRelation = terminalMapper.checkRelation(merchant.getId(), Integer.valueOf(userId));
+                        if(checkRelation > 0) {
+                            // 执行打卡操作
+                            //punchAttendService.punchAttend(snCode, userId);
+                            // 执行投保操作
+                            //punchAttendService.insureApply(snCode, userId);
+
+                            return ResultMsg.respData(0, "成功！", null);
+                        } else {
+                            // 用户未与该商户进行绑定
+                            Map<String, String> mapData = new HashMap<>();
+                            mapData.put("faceId", userId);
+                            mapData.put("snCode", snCode);
+                            return ResultMsg.respData(202, "用户未与商户进行绑定！", mapData);
+                        }
                     } else {
-                        // 用户未与该商户进行绑定
-                        FaceInfoVO faceInfoVO = new FaceInfoVO().setFaceId(Integer.valueOf(userId)).setSnCode(snCode);
-                        return ApiResponse.responseData(201, "用户未与该商户进行绑定！", faceInfoVO);
+                        // 创建脸部-雇员信息记录
+                        EmployeeManage employee = new EmployeeManage().setFaceUrl(faceUrl);
+                        terminalMapper.addEmployeeManage(employee);
+
+                        // 将设备编码sn_code、人脸id返回给前端进行注册操作
+                        Map<String, String> mapData = new HashMap<>();
+                        mapData.put("faceId", employee.getId().toString());
+                        mapData.put("snCode", snCode);
+                        return ResultMsg.respData(203, "用户未注册！", mapData);
                     }
                 } else {
-                    // 创建脸部-雇员信息记录
-                    EmployeeManage employee = new EmployeeManage().setFaceUrl(faceUrl);
-                    terminalMapper.addEmployeeManage(employee);
-                    // 将设备编码sn_code、人脸id返回给前端进行注册操作
-                    FaceInfoVO faceInfoVO = new FaceInfoVO().setFaceId(employee.getId()).setSnCode(snCode);
-                    return ApiResponse.responseData(201, "用户未注册！", faceInfoVO);
+                    return ResultMsg.respData(201, "对比百度智能云人脸识别异常！", null);
                 }
-            } else {
-                return ApiResponse.responseData(201, "对比百度智能云人脸识别异常！", "");
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        return ResultMsg.respData(999, "接口异常！", null);
     }
 
     @Override

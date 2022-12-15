@@ -20,4 +20,7 @@ public class WxJsapiTicket {
 
     // timestamp
     private String timestamp;
+
+    // url
+    private String url;
 }

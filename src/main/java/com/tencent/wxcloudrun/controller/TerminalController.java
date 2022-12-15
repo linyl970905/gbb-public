@@ -1,6 +1,7 @@
 package com.tencent.wxcloudrun.controller;
 
 import com.tencent.wxcloudrun.config.ApiResponse;
+import com.tencent.wxcloudrun.config.ResultMsg;
 import com.tencent.wxcloudrun.dto.EmpRegisterDTO;
 import com.tencent.wxcloudrun.service.TerminalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,23 +23,22 @@ public class TerminalController implements Serializable {
 
     /**
      * 查询设备是否激活
-     * @param snCode
+     * @param requestJson
      * @return
      */
-    @GetMapping("/getDeviceBySnCode")
-    public ApiResponse getDeviceBySnCode(@RequestParam String snCode) {
-        return terminalService.getDeviceBySnCode(snCode);
+    @PostMapping("/getDeviceBySnCode")
+    public ResultMsg getDeviceBySnCode(@RequestBody String requestJson) {
+        return terminalService.getDeviceBySnCode(requestJson);
     }
 
     /**
      * 终端扫码后：打卡/登记
-     * @param snCode
-     * @param faceUrl
+     * @param requestJson
      * @return
      */
-    @GetMapping("/operaPunch")
-    public ApiResponse operaPunch(@RequestParam String snCode, @RequestParam String faceUrl) throws Exception {
-        return terminalService.operaPunch(snCode, faceUrl);
+    @PostMapping("/operaPunch")
+    public ResultMsg operaPunch(@RequestBody String requestJson) throws Exception {
+        return terminalService.operaPunch(requestJson);
     }
 
     /**

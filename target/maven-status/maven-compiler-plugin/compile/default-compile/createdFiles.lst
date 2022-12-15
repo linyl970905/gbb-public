@@ -9,12 +9,13 @@ com\tencent\wxcloudrun\model\Province.class
 com\tencent\wxcloudrun\model\PunchAttendRule.class
 com\tencent\wxcloudrun\service\impl\FaceVerifyServiceImpl.class
 com\tencent\wxcloudrun\vo\PunchDetailVO.class
+com\tencent\wxcloudrun\model\RechargeRecord.class
 com\tencent\wxcloudrun\service\impl\TerminalServiceImpl.class
 com\tencent\wxcloudrun\model\MerEmpRelation.class
 com\tencent\wxcloudrun\utils\OrderNoType.class
 com\tencent\wxcloudrun\dao\GzhMapper.class
-com\tencent\wxcloudrun\vo\FaceInfoVO.class
 com\tencent\wxcloudrun\controller\WxPayController.class
+com\tencent\wxcloudrun\config\ResultMsg.class
 com\tencent\wxcloudrun\controller\FileUploadController.class
 com\tencent\wxcloudrun\dto\EmpRegisterDTO.class
 com\tencent\wxcloudrun\model\EmployeeManage.class

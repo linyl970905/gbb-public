@@ -1,6 +1,7 @@
 package com.tencent.wxcloudrun.service;
 
 import com.tencent.wxcloudrun.config.ApiResponse;
+import com.tencent.wxcloudrun.config.ResultMsg;
 import com.tencent.wxcloudrun.dto.EmpRegisterDTO;
 import com.tencent.wxcloudrun.model.EmployeeManage;
 import com.tencent.wxcloudrun.model.MerchantManage;
@@ -17,9 +18,9 @@ import java.util.List;
  */
 public interface TerminalService {
 
-    ApiResponse getDeviceBySnCode(String snCode);
+    ResultMsg getDeviceBySnCode(String requestJson);
 
-    ApiResponse operaPunch(String snCode, String faceUrl) throws Exception;
+    ResultMsg operaPunch(String requestJson) throws Exception;
 
     EmployeeManage getEmployeeByFaceId(String faceId);
 

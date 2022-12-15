@@ -20,7 +20,6 @@ E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\dao\PunchAttendMappe
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\service\TerminalService.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\utils\baidu\HttpUtil.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\vo\CityAreaList.java
-E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\vo\FaceInfoVO.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\utils\baidu\GsonUtils.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\model\MerchantManage.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\model\City.java
@@ -28,6 +27,7 @@ E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\model\EmployeeManage
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\utils\zhengmian\NameHttpClientPost.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\model\InsDayRecord.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\controller\TerminalController.java
+E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\config\ResultMsg.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\vo\PunchDetailVO.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\model\Order.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\model\DeviceManage.java
@@ -46,6 +46,7 @@ E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\utils\zhengmian\Http
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\vo\PunchArrayVO.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\service\impl\GzhServiceImpl.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\dao\TerminalMapper.java
+E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\model\RechargeRecord.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\controller\FileUploadController.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\controller\AuthorizeController.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\controller\PunchAttendController.java
