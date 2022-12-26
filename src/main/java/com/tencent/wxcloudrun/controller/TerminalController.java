@@ -77,6 +77,7 @@ public class TerminalController implements Serializable {
      * @param openId
      * @return
      */
+    @GetMapping("/getEmployeePage")
     public ApiResponse getEmployeePage(@RequestParam String openId) {
         return ApiResponse.ok(terminalService.getEmployeePage(openId));
     }
@@ -98,7 +99,7 @@ public class TerminalController implements Serializable {
      * @param yearMonthDay
      * @return
      */
-    @GetMapping("/getRecordByTime")
+    @GetMapping("/")
     public ApiResponse getRecordByTime(@RequestParam Integer merId, @RequestParam Integer empId, @RequestParam String yearMonthDay) {
         return ApiResponse.ok(terminalService.getRecordByTime(merId, empId, yearMonthDay));
     }

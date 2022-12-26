@@ -5,14 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5a8d8e1b-9f90-40ad-8060-76d28a265733" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/config/ResultMsg.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/utils/RSAUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/controller/AuthorizeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/controller/AuthorizeController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/controller/TerminalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/controller/TerminalController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/service/TerminalService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/service/TerminalService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/service/impl/TerminalServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/service/impl/TerminalServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/utils/WxJsapiTicket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/utils/WxJsapiTicket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tencent/wxcloudrun/vo/FaceInfoVO.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -146,10 +139,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="301" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1671012250447" />
-    <state x="349" y="146" key="IDE.errors.dialog" timestamp="1671068712145">
+    <state x="349" y="146" key="IDE.errors.dialog" timestamp="1672018796416">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="349" y="146" key="IDE.errors.dialog/0.0.1536.824@0.0.1536.824" timestamp="1671068712145" />
+    <state x="349" y="146" key="IDE.errors.dialog/0.0.1536.824@0.0.1536.824" timestamp="1672018796416" />
     <state x="299" y="67" key="Maven.ArtifactSearchDialog" timestamp="1668501347293">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
