@@ -158,6 +158,7 @@ public class GzhServiceImpl implements GzhService {
                 .setBusinessLicense(merchant.getBusinessLicense())
                 .setPlaceImage(merchant.getPlaceImage())
                 .setFaceScore(merchant.getFaceScore())
+                .setBalance(merchant.getBalance())
                 .setCreateTime(merchant.getCreateTime())
                 .setDeviceNum(deviceNum)
                 .setEmployeeNum(employeeNum);

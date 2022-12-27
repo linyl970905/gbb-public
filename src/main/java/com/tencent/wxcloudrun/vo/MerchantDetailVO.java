@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -41,6 +42,9 @@ public class MerchantDetailVO implements Serializable {
 
     // 人脸识别相似阀值
     private Integer faceScore;
+
+    // 账户余额
+    private BigDecimal balance;
 
     // 创建时间
     private Date createTime;

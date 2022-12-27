@@ -13,6 +13,7 @@ com\tencent\wxcloudrun\model\RechargeRecord.class
 com\tencent\wxcloudrun\service\impl\TerminalServiceImpl.class
 com\tencent\wxcloudrun\model\MerEmpRelation.class
 com\tencent\wxcloudrun\utils\OrderNoType.class
+com\tencent\wxcloudrun\utils\RSAUtils.class
 com\tencent\wxcloudrun\dao\GzhMapper.class
 com\tencent\wxcloudrun\controller\WxPayController.class
 com\tencent\wxcloudrun\config\ResultMsg.class
