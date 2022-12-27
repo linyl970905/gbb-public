@@ -98,7 +98,6 @@
         UPDATE
             punch_attend_rule
         SET
-            mer_id = #{merId},
             punch_type = #{punchType},
             one_start_time = #{oneStartTime},
             one_normal_time = #{oneNormalTime},
@@ -117,8 +116,8 @@
             five_end_time = #{fiveEndTime},
             six_start_time = #{sixStartTime},
             six_normal_time = #{sixNormalTime},
-            six_end_time = #{sixEndTime},
-        WHERE id = #{id}
+            six_end_time = #{sixEndTime}
+        WHERE mer_id = #{merId}
     </update>
 
     <select id="getAllDays" resultType="java.lang.Integer">

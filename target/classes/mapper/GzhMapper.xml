@@ -95,8 +95,8 @@
     </update>
 
     <insert id="addRechargeRecord" parameterType="com.tencent.wxcloudrun.model.RechargeRecord">
-        INSERT INTO recharge_record (mer_id, recharge_amount, before_balance, after_balance, create_time)
-        VALUES (#{merId}, #{rechargeAmount}, #{beforeBalance}, #{afterBalance}, NOW())
+        INSERT INTO recharge_record (cloud_id, recharge_amount, before_balance, after_balance, create_time)
+        VALUES (#{cloudId}, #{rechargeAmount}, #{beforeBalance}, #{afterBalance}, NOW())
     </insert>
 
     <select id="getRechargeRecordList" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.RechargeRecord">

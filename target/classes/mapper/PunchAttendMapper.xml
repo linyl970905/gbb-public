@@ -117,7 +117,7 @@
             five_end_time = #{fiveEndTime},
             six_start_time = #{sixStartTime},
             six_normal_time = #{sixNormalTime},
-            six_end_time = #{sixEndTime},
+            six_end_time = #{sixEndTime}
         WHERE id = #{id}
     </update>
 
