@@ -26,6 +26,7 @@ com\tencent\wxcloudrun\utils\baidu\GsonUtils.class
 com\tencent\wxcloudrun\model\Order.class
 com\tencent\wxcloudrun\WxCloudRunApplication.class
 com\tencent\wxcloudrun\vo\CityAreaList.class
+com\tencent\wxcloudrun\controller\TestController.class
 com\tencent\wxcloudrun\utils\baidu\HttpUtil.class
 com\tencent\wxcloudrun\utils\baidu\FaceAPIConstants.class
 com\tencent\wxcloudrun\model\InsDayRecord.class
@@ -51,6 +52,7 @@ com\tencent\wxcloudrun\vo\EmployeePageVO.class
 com\tencent\wxcloudrun\vo\ProvinceCityList.class
 com\tencent\wxcloudrun\service\GzhService.class
 com\tencent\wxcloudrun\model\Area.class
+com\tencent\wxcloudrun\utils\NetworkUtil.class
 com\tencent\wxcloudrun\utils\WxJsapiTicket.class
 com\tencent\wxcloudrun\utils\zhengmian\HttpClientPost$1.class
 com\tencent\wxcloudrun\service\TerminalService.class

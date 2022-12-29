@@ -5,6 +5,12 @@ import cn.hutool.http.HttpException;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
+import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
+import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
+import com.github.binarywang.wxpay.config.WxPayConfig;
+import com.github.binarywang.wxpay.exception.WxPayException;
+import com.github.binarywang.wxpay.service.WxPayService;
+import com.github.binarywang.wxpay.service.impl.WxPayServiceApacheHttpImpl;
 import com.tencent.wxcloudrun.config.ApiResponse;
 import com.tencent.wxcloudrun.utils.IpAddressUtil;
 import com.tencent.wxcloudrun.utils.OrderNoType;
@@ -16,6 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -72,5 +81,61 @@ public class WxPayController {
             }
         }
         return ApiResponse.error("提示：微信支付请求失败！");
+    }
+
+    /**
+     * 公众号微信支付参数
+     * @return
+     */
+    private static WxPayService getWxPayService() {
+        final String wxAppId = "wxdf2bfef7aaa15a33";
+        final String wxMchId = "1633720711";
+        final String wxMchKey = "aqndo0horw1ipk4nrpsbdm153dpgi4d0";
+        WxPayConfig wxPayConfig = new WxPayConfig();
+        wxPayConfig.setAppId(wxAppId);
+        wxPayConfig.setMchId(wxMchId);
+        wxPayConfig.setMchKey(wxMchKey);
+        WxPayService payService = new WxPayServiceApacheHttpImpl();
+        payService.setConfig(wxPayConfig);
+        return payService;
+    }
+
+    @GetMapping("/getPayObject")
+    public static HashMap<String, String> getPayObject(HttpServletRequest request,
+                                                       @RequestParam String openId,
+                                                       @RequestParam BigDecimal totalFee) {
+        String ipAddr = IpAddressUtil.getIpAddress(request);
+        LocalDateTime localDateTime = LocalDateTime.now().plusMinutes(3);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        String orderTimeExpire = formatter.format(localDateTime);
+        WxPayUnifiedOrderRequest orderRequest = WxPayUnifiedOrderRequest.newBuilder()
+                .deviceInfo("WEB")
+                .body("订单：购买考勤设备！")
+                .outTradeNo(OrderNoType.getOrderNoType("GBB-D", 2))
+                .totalFee(totalFee.multiply(new BigDecimal(100)).setScale(0, RoundingMode.DOWN).intValue())
+                .spbillCreateIp(ipAddr)
+                .notifyUrl("http://115.29.203.182:8280/wbb_boss_api/testApi")
+                .tradeType("JSAPI")
+                .productId(OrderNoType.getOrderNoType("GBB-D", 2))
+                .attach("1")
+                .receipt("Y")
+                .timeExpire(orderTimeExpire)
+                .openid(openId)
+                .build();
+        WxPayMpOrderResult result = null;
+        try {
+            result = getWxPayService().createOrder(orderRequest);
+        } catch (WxPayException e) {
+            e.printStackTrace();
+        }
+        HashMap<String,String> map=new HashMap<>();
+        map.put("appId",result.getAppId());
+        map.put("timeStamp",result.getTimeStamp());
+        map.put("nonceStr",result.getNonceStr());
+        map.put("package",result.getPackageValue());
+        map.put("signType",result.getSignType());
+        map.put("paySign",result.getPaySign());
+
+        return map;
     }
 }

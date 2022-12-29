@@ -36,6 +36,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.Base64Utils;
+import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 public class HttpClientPost {
@@ -211,9 +213,20 @@ public class HttpClientPost {
 
 		//Post("殷杰", "320621197005290539", "https://7072-prod-9gdfw13rcabb4e9a-1314621229.tcb.qcloud.la/others/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20221118102909.png?sign=7b108e87a5616f2d84b31004a7c0c5d2&t=1668738602");
 
-		String response = Post("林玉亮", "362202199709052835", "https://7072-prod-9gdfw13rcabb4e9a-1314621229.tcb.qcloud.la/others/57eebeafc902e1c094a4d5886066b77.png?sign=a26164d4624399bb83357e62f935bfec&t=1669948384");
+		/*String response = Post("林玉亮", "362202199709052835", "https://7072-prod-9gdfw13rcabb4e9a-1314621229.tcb.qcloud.la/others/57eebeafc902e1c094a4d5886066b77.png?sign=a26164d4624399bb83357e62f935bfec&t=1669948384");
 
-		System.out.println(response);
+		System.out.println(response);*/
+
+
+		String imageUrl = "https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png";
+
+		String imageToBase64 = imageUrlToBase64(imageUrl);
+
+		System.out.println("图片路径转Base64位：" + imageToBase64);
+
+		String s = Base64Utils.encodeToUrlSafeString(imageToBase64.getBytes());
+
+		System.out.println(s);
 	}
 
 }

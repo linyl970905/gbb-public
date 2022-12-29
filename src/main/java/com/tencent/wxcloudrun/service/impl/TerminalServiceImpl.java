@@ -57,9 +57,9 @@ public class TerminalServiceImpl implements TerminalService {
             // 根据sn码查询设备状态
             DeviceManage device = terminalMapper.getDeviceBySnCode(snCode);
             if (device == null) {
-                return ResultMsg.respData(101, "未查询到设备信息！", null);
+                return ResultMsg.respData(101, "设备未激活！", null);
             } else if (device.getStatus() == 0) {
-                return ResultMsg.respData(102, "设备未激活！", null);
+                return ResultMsg.respData(101, "设备未激活！", null);
             } else {
                 return ResultMsg.respData(0, "成功！", null);
             }

@@ -52,12 +52,13 @@ public class GzhServiceImpl implements GzhService {
         MerchantManage merchant = gzhMapper.getMerchantByCloudId(cloudId);
         if (merchant == null) {
             // 2.不存在时--执行新增操作
-            merchant.setCloudId(cloudId);
-            Integer result = gzhMapper.addMerchantManage(merchant);
+            MerchantManage addMerchant = new MerchantManage();
+            addMerchant.setCloudId(cloudId);
+            Integer result = gzhMapper.addMerchantManage(addMerchant);
             if (result > 0) {
                 // 新创建的公众号同步生成打卡规则
                 PunchAttendRule rule = new PunchAttendRule()
-                        .setMerId(merchant.getId())
+                        .setMerId(addMerchant.getId())
                         .setPunchType(1)
                         .setOneStartTime("08:30")
                         .setOneNormalTime("09:00")

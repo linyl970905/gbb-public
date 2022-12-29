@@ -15,11 +15,13 @@ E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\service\impl\Termina
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\service\GzhService.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\model\PunchAttendRecord.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\utils\IpAddressUtil.java
+E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\utils\NetworkUtil.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\utils\RSAUtils.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\controller\GzhController.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\dao\PunchAttendMapper.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\service\TerminalService.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\utils\baidu\HttpUtil.java
+E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\controller\TestController.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\vo\CityAreaList.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\utils\baidu\GsonUtils.java
 E:\Java-Gbb\gbb-public\src\main\java\com\tencent\wxcloudrun\model\MerchantManage.java
