@@ -13,6 +13,7 @@ import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.service.impl.WxPayServiceApacheHttpImpl;
 import com.tencent.wxcloudrun.config.ApiResponse;
 import com.tencent.wxcloudrun.utils.IpAddressUtil;
+import com.tencent.wxcloudrun.utils.NetworkUtil;
 import com.tencent.wxcloudrun.utils.OrderNoType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
@@ -101,10 +103,14 @@ public class WxPayController {
     }
 
     @GetMapping("/getPayObject")
-    public static HashMap<String, String> getPayObject(HttpServletRequest request,
-                                                       @RequestParam String openId,
-                                                       @RequestParam BigDecimal totalFee) {
-        String ipAddr = IpAddressUtil.getIpAddress(request);
+    public static HashMap<String, String> getPayObject(@RequestParam String openId,
+                                                       @RequestParam String totalFee) {
+        String ipAddr = "127.0.0.1";
+        /*try {
+            ipAddr = NetworkUtil.getIpAddress(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
         LocalDateTime localDateTime = LocalDateTime.now().plusMinutes(3);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         String orderTimeExpire = formatter.format(localDateTime);
@@ -112,7 +118,7 @@ public class WxPayController {
                 .deviceInfo("WEB")
                 .body("订单：购买考勤设备！")
                 .outTradeNo(OrderNoType.getOrderNoType("GBB-D", 2))
-                .totalFee(totalFee.multiply(new BigDecimal(100)).setScale(0, RoundingMode.DOWN).intValue())
+                .totalFee(new BigDecimal(totalFee).multiply(new BigDecimal(100)).setScale(0, RoundingMode.DOWN).intValue())
                 .spbillCreateIp(ipAddr)
                 .notifyUrl("http://115.29.203.182:8280/wbb_boss_api/testApi")
                 .tradeType("JSAPI")
@@ -128,14 +134,62 @@ public class WxPayController {
         } catch (WxPayException e) {
             e.printStackTrace();
         }
-        HashMap<String,String> map=new HashMap<>();
-        map.put("appId",result.getAppId());
-        map.put("timeStamp",result.getTimeStamp());
-        map.put("nonceStr",result.getNonceStr());
-        map.put("package",result.getPackageValue());
-        map.put("signType",result.getSignType());
-        map.put("paySign",result.getPaySign());
 
+        HashMap<String, String> map = new HashMap<>();
+        map.put("appId", result.getAppId());
+        map.put("timeStamp", result.getTimeStamp());
+        map.put("nonceStr", result.getNonceStr());
+        map.put("package", result.getPackageValue());
+        map.put("signType", result.getSignType());
+        map.put("paySign", result.getPaySign());
         return map;
+    }
+
+    @GetMapping("/getPayParams")
+    public static ApiResponse getPayParams(@RequestParam String openId, @RequestParam BigDecimal totalFee) {
+        // 请求ip地址
+        String ipAddr = "127.0.0.1";
+
+        LocalDateTime localDateTime = LocalDateTime.now().plusMinutes(3);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        String orderTimeExpire = formatter.format(localDateTime);
+
+        // 订单请求
+        WxPayUnifiedOrderRequest orderRequest = WxPayUnifiedOrderRequest.newBuilder()
+                .deviceInfo("WEB")
+                .body("微信支付：充值账户余额！")
+                .outTradeNo(OrderNoType.getOrderNoType("GBB-D", 2))
+                .totalFee(totalFee.multiply(new BigDecimal(100)).setScale(0, RoundingMode.DOWN).intValue())
+                .spbillCreateIp(ipAddr)
+                .notifyUrl("http://gbb.wubaobao.com/pay/testApi")
+                .tradeType("JSAPI")
+                .productId(OrderNoType.getOrderNoType("GBB-D", 2))
+                .attach("1")
+                .receipt("Y")
+                .timeExpire(orderTimeExpire)
+                .openid(openId)
+                .build();
+        WxPayMpOrderResult result = null;
+        try {
+            result = getWxPayService().createOrder(orderRequest);
+        } catch (WxPayException e) {
+            e.printStackTrace();
+        }
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("appId", result.getAppId());
+        map.put("timeStamp", result.getTimeStamp());
+        map.put("nonceStr", result.getNonceStr());
+        map.put("package", result.getPackageValue());
+        map.put("signType", result.getSignType());
+        map.put("paySign", result.getPaySign());
+
+        return ApiResponse.ok(map);
+    }
+
+    public static void main(String[] args) {
+        ApiResponse payParams = getPayParams("opkpR6dbGWaNtPLVskf-QoNjXsyo", new BigDecimal(1));
+
+        System.out.println(payParams);
     }
 }
