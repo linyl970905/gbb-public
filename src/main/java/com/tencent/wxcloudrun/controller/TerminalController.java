@@ -42,6 +42,26 @@ public class TerminalController implements Serializable {
     }
 
     /**
+     * 小程序-员工注册接口
+     * @param requestJson
+     * @return
+     */
+    @PostMapping("/employeeRegister")
+    public ResultMsg employeeRegister(@RequestBody String requestJson) {
+        return terminalService.employeeRegister(requestJson);
+    }
+
+    /**
+     * 小程序-设备心跳接口
+     * @param requestJson
+     * @return
+     */
+    @PostMapping("/deviceHeartBeat")
+    public ResultMsg deviceHeartBeat(@RequestBody String requestJson) {
+        return terminalService.deviceHeartBeat(requestJson);
+    }
+
+    /**
      * 根据faceId获取雇员信息(脸部照片地址)
      * @param faceId
      * @return
@@ -74,12 +94,12 @@ public class TerminalController implements Serializable {
 
     /**
      * 小程序-员工首页(基本信息、保险信息)
-     * @param openId
+     * @param phone
      * @return
      */
     @GetMapping("/getEmployeePage")
-    public ApiResponse getEmployeePage(@RequestParam String openId) {
-        return ApiResponse.ok(terminalService.getEmployeePage(openId));
+    public ApiResponse getEmployeePage(@RequestParam String phone) {
+        return ApiResponse.ok(terminalService.getEmployeePage(phone));
     }
 
     /**

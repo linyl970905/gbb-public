@@ -20,13 +20,22 @@
         SELECT COUNT(1) FROM mer_emp_relation WHERE mer_id = #{merId} and emp_id = #{empId}
     </select>
 
-    <select id="getEmployeeByFaceId" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.EmployeeManage">
-        SELECT * FROM employee_manage WHERE id = #{faceId}
+    <update id="deviceHeartBeat" parameterType="java.lang.String">
+        UPDATE device_manage set heart_beat = NOW() WHERE sn_code = #{snCode}
+    </update>
+
+    <select id="getEmployeeByPhone" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.EmployeeManage">
+        SELECT * FROM employee_manage WHERE phone = #{phone}
+    </select>
+
+    <select id="getEmployeeByFaceId" parameterType="java.lang.Integer" resultType="com.tencent.wxcloudrun.model.EmployeeManage">
+        SELECT * FROM employee_manage WHERE id = #{id}
     </select>
 
     <insert id="addEmployeeManage" parameterType="com.tencent.wxcloudrun.model.EmployeeManage"
             useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO employee_manage (face_url, status) VALUES (#{faceUrl}, 1)
+        INSERT INTO employee_manage (face_url, name, id_card, phone, address, job_code, status)
+        VALUES (#{faceUrl}, #{name}, #{idCard}, #{phone}, #{address}, #{jobCode}, 1)
     </insert>
 
     <insert id="addMerEmpRelation">
@@ -35,13 +44,13 @@
 
     <update id="updateEmployeeManage" parameterType="com.tencent.wxcloudrun.model.EmployeeManage">
         UPDATE employee_manage
-        SET status = 0, open_id = #{openId}, face_url = #{faceUrl},
-            name = #{name}, id_card = #{idCard}, phone = #{phone}, address = #{address}, job_code = #{jobCode}
+        SET status = 0, face_url = #{faceUrl}, name = #{name},
+            id_card = #{idCard}, phone = #{phone}, address = #{address}, job_code = #{jobCode}
         WHERE id = #{id}
     </update>
 
     <select id="getEmployeePage" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.vo.EmployeePageVO">
-        SELECT * FROM employee_manage WHERE status = 0 AND open_id = #{openId}
+        SELECT * FROM employee_manage WHERE status = 0 AND phone = #{phone}
     </select>
 
     <select id="getRecordByIdCard" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.InsDayRecord">

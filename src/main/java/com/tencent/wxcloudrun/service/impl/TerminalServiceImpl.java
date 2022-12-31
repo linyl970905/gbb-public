@@ -88,9 +88,7 @@ public class TerminalServiceImpl implements TerminalService {
             if (response == null) {
                 return ResultMsg.respData(201, "对比百度智能云人脸识别异常！", null);
             } else {
-                cn.hutool.json.JSONObject responseJson = JSONUtil.parseObj(response);
-                String resultStr = responseJson.getStr("result");
-                cn.hutool.json.JSONObject resultJson = JSONUtil.parseObj(resultStr);
+                cn.hutool.json.JSONObject resultJson = JSONUtil.parseObj(response);
                 JSONArray userList = resultJson.getJSONArray("user_list");
                 if (userList != null) {
                     JSONObject parseObj = JSONUtil.parseObj(userList.get(0));
@@ -136,23 +134,91 @@ public class TerminalServiceImpl implements TerminalService {
     }
 
     @Override
+    public ResultMsg employeeRegister(String requestJson) {
+        try {
+            String json = RSAUtils.getDecodedData(requestJson);
+            cn.hutool.json.JSONObject result = JSONUtil.parseObj(json);
+            String name = result.getStr("name");
+            String idCard = result.getStr("idCard");
+            String phone = result.getStr("phone");
+            String snCode = result.getStr("snCode");
+            String faceUrl = result.getStr("faceUrl");
+
+            // 1.获取设备信息、商户信息
+            DeviceManage device = terminalMapper.getDeviceBySnCode(snCode);
+            MerchantManage merchant = terminalMapper.getMerchantByCloudId(device.getCloudId());
+            if (device == null) {
+                return ResultMsg.respData(301, "设备未激活！", null);
+            } else if (device.getStatus() == 0) {
+                return ResultMsg.respData(301, "设备未激活！", null);
+            } else if (merchant == null) {
+                return ResultMsg.respData(302, "未查询到设备对应的商户！", null);
+            }
+
+            // 2.先查询员工表中是否已存在该用户
+            EmployeeManage employee = terminalMapper.getEmployeeByPhone(phone);
+            if (employee != null) {
+                Integer checkRelation = terminalMapper.checkRelation(merchant.getId(), employee.getId());
+                if (checkRelation <= 0) {
+                    // 3.将该设备与员工绑定
+                    terminalMapper.addMerEmpRelation(merchant.getId(), employee.getId());
+                }
+            } else {
+                EmployeeManage addEmployee = new EmployeeManage()
+                        .setFaceUrl(faceUrl)
+                        .setName(name)
+                        .setIdCard(idCard)
+                        .setPhone(phone)
+                        .setAddress(null)
+                        .setJobCode(null);
+                Integer num = terminalMapper.addEmployeeManage(addEmployee);
+                if (num > 0) {
+                    terminalMapper.addMerEmpRelation(merchant.getId(), addEmployee.getId());
+                    // 4.上传人脸照片至百度智能云-人脸识别库
+                    faceVerifyService.insertFace(employee.getFaceUrl(), addEmployee.getId().toString());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return ResultMsg.respData(0, "成功！", null);
+    }
+
+    @Override
+    public ResultMsg deviceHeartBeat(String requestJson) {
+        try {
+            String json = RSAUtils.getDecodedData(requestJson);
+            cn.hutool.json.JSONObject result = JSONUtil.parseObj(json);
+            String snCode = result.getStr("snCode");
+
+            // 更新当前设备的心跳时间
+            Integer num = terminalMapper.deviceHeartBeat(snCode);
+            if (num <= 0) {
+                return ResultMsg.respData(999, "失败！", null);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResultMsg.respData(0, "成功！", null);
+    }
+
+    @Override
     public EmployeeManage getEmployeeByFaceId(String faceId) {
-        return terminalMapper.getEmployeeByFaceId(faceId);
+        return terminalMapper.getEmployeeByFaceId(Integer.valueOf(faceId));
     }
 
     @Override
     public ApiResponse updateEmployeeFace(String faceId, String faceUrl) {
         // 1.获取之前的人脸信息、设备信息、商家信息
-        EmployeeManage employee = terminalMapper.getEmployeeByFaceId(faceId);
+        EmployeeManage employee = terminalMapper.getEmployeeByFaceId(Integer.valueOf(faceId));
 
         // 2.对比人脸库，替换后的照片是否已存在
         String response = faceVerifyService.searchFace(faceUrl);
         if (response == null) {
             return ApiResponse.error("对比百度智能云人脸识别异常！");
         } else {
-            cn.hutool.json.JSONObject responseJson = JSONUtil.parseObj(response);
-            String result = responseJson.getStr("result");
-            cn.hutool.json.JSONObject resultJson = JSONUtil.parseObj(result);
+            cn.hutool.json.JSONObject resultJson = JSONUtil.parseObj(response);
             JSONArray userList = resultJson.getJSONArray("user_list");
             if (userList != null) {
                 JSONObject parseObj = JSONUtil.parseObj(userList.get(0));
@@ -161,8 +227,6 @@ public class TerminalServiceImpl implements TerminalService {
                 if (score >= 85) {
                     return ApiResponse.error("该人脸照对应的雇员已存在！");
                 } else {
-                    // 替换人脸库中的人脸信息
-                    //faceVerifyService.updateFace(faceUrl, employee.getId().toString());
                     return ApiResponse.ok();
                 }
             } else {
@@ -184,7 +248,6 @@ public class TerminalServiceImpl implements TerminalService {
             // 2.更新员工信息
             EmployeeManage employee = new EmployeeManage()
                     .setId(registerDTO.getId())
-                    .setOpenId(registerDTO.getOpenId())
                     .setFaceUrl(registerDTO.getFaceUrl())
                     .setName(registerDTO.getName())
                     .setIdCard(registerDTO.getIdCard())
@@ -209,10 +272,12 @@ public class TerminalServiceImpl implements TerminalService {
         }
     }
 
+
+
     @Override
-    public EmployeePageVO getEmployeePage(String openId) {
+    public EmployeePageVO getEmployeePage(String phone) {
         // 1.获取雇员基本信息
-        EmployeePageVO employeePage = terminalMapper.getEmployeePage(openId);
+        EmployeePageVO employeePage = terminalMapper.getEmployeePage(phone);
         // 2.获取按天投保最后一次保险过期时间
         InsDayRecord insDayRecord = terminalMapper.getRecordByIdCard(employeePage.getIdCard());
         if (insDayRecord == null) {

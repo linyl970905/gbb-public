@@ -22,13 +22,17 @@ public interface TerminalService {
 
     ResultMsg operaPunch(String requestJson) throws Exception;
 
+    ResultMsg employeeRegister(String requestJson);
+
+    ResultMsg deviceHeartBeat(String requestJson);
+
     EmployeeManage getEmployeeByFaceId(String faceId);
 
     ApiResponse updateEmployeeFace(String faceId, String faceUrl);
 
     ApiResponse addEmployeeManage(EmpRegisterDTO registerDTO) throws Exception;
 
-    EmployeePageVO getEmployeePage(String openId);
+    EmployeePageVO getEmployeePage(String phone);
 
     List<MerchantManage> getMerchantList(Integer empId);
 

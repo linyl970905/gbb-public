@@ -12,6 +12,12 @@ public class WxJsapiTicket {
     // appid
     private String appid;
 
+    // accessToken
+    private String accessToken;
+
+    // jsapiTicket
+    private String jsapiTicket;
+
     // nonceStr
     private String nonceStr;
 

@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.tencent.wxcloudrun.utils.BaseToImgUtil;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.http.Consts;
@@ -223,10 +224,6 @@ public class HttpClientPost {
 		String imageToBase64 = imageUrlToBase64(imageUrl);
 
 		System.out.println("图片路径转Base64位：" + imageToBase64);
-
-		String s = Base64Utils.encodeToUrlSafeString(imageToBase64.getBytes());
-
-		System.out.println(s);
 	}
 
 }

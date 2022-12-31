@@ -45,6 +45,7 @@ com\tencent\wxcloudrun\utils\zhengmian\NameHttpClientPost$1.class
 com\tencent\wxcloudrun\model\MerchantManage.class
 com\tencent\wxcloudrun\model\City.class
 com\tencent\wxcloudrun\model\DeviceManage.class
+com\tencent\wxcloudrun\utils\BaseToImgUtil.class
 com\tencent\wxcloudrun\service\impl\GzhServiceImpl.class
 com\tencent\wxcloudrun\controller\TerminalController.class
 com\tencent\wxcloudrun\vo\PunchArrayVO.class

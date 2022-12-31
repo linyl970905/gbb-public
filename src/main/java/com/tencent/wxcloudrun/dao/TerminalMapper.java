@@ -22,7 +22,11 @@ public interface TerminalMapper {
 
     Integer checkRelation(@Param("merId") Integer merId, @Param("empId") Integer empId);
 
-    EmployeeManage getEmployeeByFaceId(String faceId);
+    Integer deviceHeartBeat(String snCode);
+
+    EmployeeManage getEmployeeByPhone(String phone);
+
+    EmployeeManage getEmployeeByFaceId(Integer id);
 
     Integer addEmployeeManage(EmployeeManage employee);
 
@@ -30,7 +34,7 @@ public interface TerminalMapper {
 
     Integer updateEmployeeManage(EmployeeManage manage);
 
-    EmployeePageVO getEmployeePage(String openId);
+    EmployeePageVO getEmployeePage(String phone);
 
     InsDayRecord getRecordByIdCard(String idCard);
 

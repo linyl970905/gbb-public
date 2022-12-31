@@ -20,7 +20,7 @@ import java.net.URLDecoder;
 public class AuthorizeController {
 
     @GetMapping("/getParams")
-    public ApiResponse authorizeParams(@RequestParam String url) throws Exception {
+    public static ApiResponse authorizeParams(@RequestParam String url) throws Exception {
         // 获取所有需要使用到的数据
         String appid = "wxdf2bfef7aaa15a33";	// appid
         String accessToken = JsapiTicketUtil.getAccessToken();	// accessToken
@@ -34,7 +34,14 @@ public class AuthorizeController {
 
         String signature = JsapiTicketUtil.getSha1(strSha);
 
-        WxJsapiTicket data = new WxJsapiTicket().setAppid(appid).setNonceStr(nonceStr).setSignature(signature).setTimestamp(timestamp).setUrl(url);
+        WxJsapiTicket data = new WxJsapiTicket()
+                .setAppid(appid)
+                .setAccessToken(accessToken)
+                .setJsapiTicket(jsapiTicket)
+                .setNonceStr(nonceStr)
+                .setSignature(signature)
+                .setTimestamp(timestamp)
+                .setUrl(url);
 
         return ApiResponse.ok(data);
     }

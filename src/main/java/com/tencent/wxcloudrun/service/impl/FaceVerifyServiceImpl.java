@@ -20,6 +20,7 @@ import java.util.Map;
  */
 @Service
 public class FaceVerifyServiceImpl implements FaceVerifyService {
+
     @Override
     public String searchFace(String faceUrl) {
 
@@ -36,7 +37,7 @@ public class FaceVerifyServiceImpl implements FaceVerifyService {
         // 设置jsonBody参数
         Map<String, Object> map = MapUtil.newHashMap();
         map.put("image", faceUrl);
-        map.put("image_type", "URL");
+        map.put("image_type", "BASE64");
         map.put("group_id_list", "gubaobao");
 
         String apiParams = JSONUtil.toJsonStr(map);
@@ -71,7 +72,7 @@ public class FaceVerifyServiceImpl implements FaceVerifyService {
         // 设置jsonBody参数
         Map<String, Object> map = MapUtil.newHashMap();
         map.put("image", faceUrl);
-        map.put("image_type", "URL");
+        map.put("image_type", "BASE64");
         map.put("group_id", "gubaobao");
         map.put("user_id", userId);
 
@@ -107,7 +108,7 @@ public class FaceVerifyServiceImpl implements FaceVerifyService {
         // 设置jsonBody参数
         Map<String, Object> map = MapUtil.newHashMap();
         map.put("image", faceUrl);
-        map.put("image_type", "URL");
+        map.put("image_type", "BASE64");
         map.put("group_id", "gubaobao");
         map.put("user_id", userId);
 

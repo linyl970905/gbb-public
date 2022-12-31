@@ -5,6 +5,7 @@ import com.tencent.wxcloudrun.service.PunchAttendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.Serializable;
@@ -22,12 +23,12 @@ public class TestController implements Serializable {
     private PunchAttendService punchAttendService;
 
     @GetMapping("/operaPunch")
-    public ApiResponse operaPunch(String snCode, String userId) {
+    public ApiResponse operaPunch(@RequestParam String snCode, @RequestParam String userId) {
         return punchAttendService.punchAttend(snCode, userId);
     }
 
     @GetMapping("/insureApply")
-    public ApiResponse insureApply(String snCode, String userId) throws Exception {
+    public ApiResponse insureApply(@RequestParam String snCode, @RequestParam String userId) throws Exception {
         return punchAttendService.insureApply(snCode, userId);
     }
 }
