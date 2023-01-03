@@ -1,6 +1,10 @@
 package com.tencent.wxcloudrun.service.impl;
 
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.NumberUtil;
+import cn.hutool.http.HttpException;
+import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -18,6 +22,7 @@ import com.tencent.wxcloudrun.utils.zhengmian.HttpClientPost;
 import com.tencent.wxcloudrun.vo.EmployeePageVO;
 import com.tencent.wxcloudrun.vo.PunchArrayVO;
 import com.tencent.wxcloudrun.vo.PunchDetailVO;
+import com.tencent.wxcloudrun.vo.uploadFile.UploadFileVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,7 +93,9 @@ public class TerminalServiceImpl implements TerminalService {
             if (response == null) {
                 return ResultMsg.respData(201, "对比百度智能云人脸识别异常！", null);
             } else {
-                cn.hutool.json.JSONObject resultJson = JSONUtil.parseObj(response);
+                cn.hutool.json.JSONObject responseJson = JSONUtil.parseObj(response);
+                String resultValue = responseJson.getStr("result");
+                cn.hutool.json.JSONObject resultJson = JSONUtil.parseObj(resultValue);
                 JSONArray userList = resultJson.getJSONArray("user_list");
                 if (userList != null) {
                     JSONObject parseObj = JSONUtil.parseObj(userList.get(0));
@@ -140,7 +147,6 @@ public class TerminalServiceImpl implements TerminalService {
             cn.hutool.json.JSONObject result = JSONUtil.parseObj(json);
             String name = result.getStr("name");
             String idCard = result.getStr("idCard");
-            String phone = result.getStr("phone");
             String snCode = result.getStr("snCode");
             String faceUrl = result.getStr("faceUrl");
 
@@ -151,24 +157,24 @@ public class TerminalServiceImpl implements TerminalService {
                 return ResultMsg.respData(301, "设备未激活！", null);
             } else if (device.getStatus() == 0) {
                 return ResultMsg.respData(301, "设备未激活！", null);
-            } else if (merchant == null) {
-                return ResultMsg.respData(302, "未查询到设备对应的商户！", null);
             }
 
             // 2.先查询员工表中是否已存在该用户
-            EmployeeManage employee = terminalMapper.getEmployeeByPhone(phone);
+            EmployeeManage employee = terminalMapper.getEmployeeByInfo(name, idCard);
             if (employee != null) {
                 Integer checkRelation = terminalMapper.checkRelation(merchant.getId(), employee.getId());
                 if (checkRelation <= 0) {
                     // 3.将该设备与员工绑定
                     terminalMapper.addMerEmpRelation(merchant.getId(), employee.getId());
+                } else {
+                    return ResultMsg.respData(302, "用户已注册及绑定，请勿重复操作！", null);
                 }
             } else {
                 EmployeeManage addEmployee = new EmployeeManage()
                         .setFaceUrl(faceUrl)
                         .setName(name)
                         .setIdCard(idCard)
-                        .setPhone(phone)
+                        .setPhone(null)
                         .setAddress(null)
                         .setJobCode(null);
                 Integer num = terminalMapper.addEmployeeManage(addEmployee);
@@ -272,7 +278,74 @@ public class TerminalServiceImpl implements TerminalService {
         }
     }
 
+    @Override
+    public ApiResponse getAppletsPhone(String code) {
+        // 请求参数
+        Map<String, Object> requestBody = MapUtil.newHashMap();
+        requestBody.put("code", code);
 
+        // 请求上传文件链接接口
+        HttpRequest httpRequest = HttpRequest.post("https://api.weixin.qq.com/wxa/business/getuserphonenumber");
+        httpRequest.contentType("application/json");
+        httpRequest.body(JSONUtil.toJsonStr(requestBody));
+        httpRequest.setConnectionTimeout(18000);
+        httpRequest.setReadTimeout(20000);
+        HttpResponse execute = null;
+
+        try {
+            execute = httpRequest.execute();
+        } catch (HttpException e) {
+            e.printStackTrace();
+        }
+        if (execute == null) {
+            return ApiResponse.error("提示：请求失败！");
+        } else {
+            if (execute.isOk()) {
+                String respBody = execute.body();
+
+                cn.hutool.json.JSONObject responseJson = JSONUtil.parseObj(respBody);
+                String phoneInfo = responseJson.getStr("phone_info");
+                cn.hutool.json.JSONObject resultJson = JSONUtil.parseObj(phoneInfo);
+
+                return ApiResponse.ok(resultJson);
+            }
+        }
+
+        return ApiResponse.error("提示：请求失败！");
+    }
+
+    @Override
+    public ApiResponse checkEmployeeByPhone(String phone) {
+        EmployeeManage employee = terminalMapper.getEmployeeByPhone(phone);
+        if (employee != null) {
+            return ApiResponse.ok();
+        } else {
+            return ApiResponse.error("该用户尚未绑定！");
+        }
+    }
+
+    @Override
+    public ApiResponse checkEmployeeInfo(String name, String idCard) {
+        EmployeeManage employee = terminalMapper.getEmployeeByInfo(name, idCard);
+        if (employee == null) {
+            return ApiResponse.error("您输入的姓名、身份证号码对应的人员不存在！");
+        } else {
+            if (employee.getPhone() != null) {
+                return ApiResponse.error("该人员已绑定其他手机号！");
+            }
+        }
+        return ApiResponse.ok(employee);
+    }
+
+    @Override
+    public ApiResponse bindAppletsPhone(Integer id, String phone) {
+        Integer result = terminalMapper.bindAppletsPhone(id, phone);
+        if (result > 0) {
+            return ApiResponse.ok();
+        } else {
+            return ApiResponse.error("提示：绑定失败，请稍后重试！");
+        }
+    }
 
     @Override
     public EmployeePageVO getEmployeePage(String phone) {

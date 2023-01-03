@@ -24,7 +24,7 @@ public interface TerminalMapper {
 
     Integer deviceHeartBeat(String snCode);
 
-    EmployeeManage getEmployeeByPhone(String phone);
+    EmployeeManage getEmployeeByInfo(String name, String idCard);
 
     EmployeeManage getEmployeeByFaceId(Integer id);
 
@@ -33,6 +33,10 @@ public interface TerminalMapper {
     void addMerEmpRelation(@Param("merId") Integer merId, @Param("empId") Integer empId);
 
     Integer updateEmployeeManage(EmployeeManage manage);
+
+    EmployeeManage getEmployeeByPhone(String phone);
+
+    Integer bindAppletsPhone(@Param("id") Integer id, @Param("phone") String phone);
 
     EmployeePageVO getEmployeePage(String phone);
 

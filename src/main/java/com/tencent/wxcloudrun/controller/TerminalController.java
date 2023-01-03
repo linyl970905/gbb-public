@@ -93,6 +93,48 @@ public class TerminalController implements Serializable {
     }
 
     /**
+     * 获取小程序用户手机号码
+     * @param code
+     * @return
+     */
+    @GetMapping("/getAppletsPhone")
+    public ApiResponse getAppletsPhone(@RequestParam String code) {
+        return terminalService.getAppletsPhone(code);
+    }
+
+    /**
+     * 根据手机号验证该用户是否存在，不存在需要执行绑定操作(根据姓名、身份证号码-绑定手机号)
+     * @param phone
+     * @return
+     */
+    @GetMapping("/checkEmployeeByPhone")
+    public ApiResponse checkEmployeeByPhone(@RequestParam String phone) {
+        return terminalService.checkEmployeeByPhone(phone);
+    }
+
+    /**
+     * 根据姓名、身份证号码验证用户信息
+     * @param name
+     * @param idCard
+     * @return
+     */
+    @GetMapping("/checkEmployeeInfo")
+    public ApiResponse checkEmployeeInfo(@RequestParam String name, @RequestParam String idCard) {
+        return terminalService.checkEmployeeInfo(name, idCard);
+    }
+
+    /**
+     * 小程序-用户绑定手机号信息
+     * @param id
+     * @param phone
+     * @return
+     */
+    @GetMapping("/bindAppletsPhone")
+    public ApiResponse bindAppletsPhone(@RequestParam Integer id, @RequestParam String phone) {
+        return terminalService.bindAppletsPhone(id, phone);
+    }
+
+    /**
      * 小程序-员工首页(基本信息、保险信息)
      * @param phone
      * @return

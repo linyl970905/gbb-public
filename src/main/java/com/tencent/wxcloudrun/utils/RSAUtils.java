@@ -207,8 +207,8 @@ public class RSAUtils {
     public static void main(String[] args) throws Exception {
         // 请求体
         Map<String, Object> requestBody = MapUtil.newHashMap();
-        requestBody.put("snCode", "SN_CODE_20221214001");
-        requestBody.put("faceUrl", "http://gbb.wubaobao.com");
+        requestBody.put("snCode", "liang-gzhDevice01");
+        //requestBody.put("faceUrl", "");
 
         // 公钥加密
         String publicJson = RSAUtils.publicEncrypt(JSONUtil.toJsonStr(requestBody), RSAUtils.getPublicKey(PUBLIC_KEY));
@@ -218,9 +218,9 @@ public class RSAUtils {
         String privateJson = getDecodedData(publicJson);
         System.out.println("解密后的值：" + privateJson);
 
-        cn.hutool.json.JSONObject result = JSONUtil.parseObj(privateJson);
+        /*cn.hutool.json.JSONObject result = JSONUtil.parseObj(privateJson);
         String snCode = result.getStr("snCode");
         String faceUrl = result.getStr("faceUrl");
-        System.out.println("snCode：" + snCode + " / faceUrl：" + faceUrl);
+        System.out.println("snCode：" + snCode + " / faceUrl：" + faceUrl);*/
     }
 }

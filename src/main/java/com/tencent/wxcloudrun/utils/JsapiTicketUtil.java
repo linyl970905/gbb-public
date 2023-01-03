@@ -70,7 +70,8 @@ public class JsapiTicketUtil {
      */
     public static String getJSApiTicket(String accessToken){
         // 获取jsapiTicket
-        String urlStr = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + accessToken + "&type=jsapi";
+        //String urlStr = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + accessToken + "&type=jsapi";
+        String urlStr = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi";
         String backData = JsapiTicketUtil.sendGet(urlStr, "utf-8", 10000);
         String ticket = (String) JSONObject.fromObject(backData).get("ticket");
         return ticket;

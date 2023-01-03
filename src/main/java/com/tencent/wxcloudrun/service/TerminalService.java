@@ -32,6 +32,14 @@ public interface TerminalService {
 
     ApiResponse addEmployeeManage(EmpRegisterDTO registerDTO) throws Exception;
 
+    ApiResponse getAppletsPhone(String code);
+
+    ApiResponse checkEmployeeByPhone(String phone);
+
+    ApiResponse checkEmployeeInfo(String name, String idCard);
+
+    ApiResponse bindAppletsPhone(Integer id, String phone);
+
     EmployeePageVO getEmployeePage(String phone);
 
     List<MerchantManage> getMerchantList(Integer empId);

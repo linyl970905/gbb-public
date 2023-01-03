@@ -24,8 +24,8 @@
         UPDATE device_manage set heart_beat = NOW() WHERE sn_code = #{snCode}
     </update>
 
-    <select id="getEmployeeByPhone" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.EmployeeManage">
-        SELECT * FROM employee_manage WHERE phone = #{phone}
+    <select id="getEmployeeByInfo" resultType="com.tencent.wxcloudrun.model.EmployeeManage">
+        SELECT * FROM employee_manage WHERE status = 0 AND name = #{name} AND id_card = #{idCard}
     </select>
 
     <select id="getEmployeeByFaceId" parameterType="java.lang.Integer" resultType="com.tencent.wxcloudrun.model.EmployeeManage">
@@ -47,6 +47,14 @@
         SET status = 0, face_url = #{faceUrl}, name = #{name},
             id_card = #{idCard}, phone = #{phone}, address = #{address}, job_code = #{jobCode}
         WHERE id = #{id}
+    </update>
+
+    <select id="getEmployeeByPhone" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.EmployeeManage">
+        SELECT * FROM employee_manage WHERE status = 0 AND phone = #{phone} LIMIT 1
+    </select>
+
+    <update id="bindAppletsPhone">
+        UPDATE employee_manage SET phone = #{phone} WHERE id = #{id}
     </update>
 
     <select id="getEmployeePage" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.vo.EmployeePageVO">
