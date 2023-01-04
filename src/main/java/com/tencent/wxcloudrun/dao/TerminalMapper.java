@@ -30,7 +30,9 @@ public interface TerminalMapper {
 
     Integer addEmployeeManage(EmployeeManage employee);
 
-    void addMerEmpRelation(@Param("merId") Integer merId, @Param("empId") Integer empId);
+    void addMerEmpRelation(@Param("merId") Integer merId, @Param("empId") Integer empId, @Param("status") Integer status);
+
+    void updateMerEmpRelation(@Param("merId") Integer merId, @Param("empId") Integer empId, @Param("status") Integer status);
 
     Integer updateEmployeeManage(EmployeeManage manage);
 

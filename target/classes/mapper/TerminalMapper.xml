@@ -25,7 +25,9 @@
     </update>
 
     <select id="getEmployeeByInfo" resultType="com.tencent.wxcloudrun.model.EmployeeManage">
-        SELECT * FROM employee_manage WHERE status = 0 AND name = #{name} AND id_card = #{idCard}
+        SELECT em.* FROM employee_manage em
+        LEFT JOIN mer_emp_relation mer ON mer.emp_id = em.id
+        WHERE mer.status = 0 AND em.name = #{name} AND em.id_card = #{idCard}
     </select>
 
     <select id="getEmployeeByFaceId" parameterType="java.lang.Integer" resultType="com.tencent.wxcloudrun.model.EmployeeManage">
@@ -34,23 +36,28 @@
 
     <insert id="addEmployeeManage" parameterType="com.tencent.wxcloudrun.model.EmployeeManage"
             useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO employee_manage (face_url, name, id_card, phone, address, job_code, status)
-        VALUES (#{faceUrl}, #{name}, #{idCard}, #{phone}, #{address}, #{jobCode}, 1)
+        INSERT INTO employee_manage (face_url, name, id_card, phone, address)
+        VALUES (#{faceUrl}, #{name}, #{idCard}, #{phone}, #{address})
     </insert>
 
     <insert id="addMerEmpRelation">
-        INSERT INTO mer_emp_relation (mer_id, emp_id) VALUES (#{merId}, #{empId})
+        INSERT INTO mer_emp_relation (mer_id, emp_id, status) VALUES (#{merId}, #{empId}, #{status})
+    </insert>
+
+    <insert id="updateMerEmpRelation">
+        UPDATE mer_emp_relation SET status = #{status} WHERE mer_id = #{merId} AND emp_id = #{empId}
     </insert>
 
     <update id="updateEmployeeManage" parameterType="com.tencent.wxcloudrun.model.EmployeeManage">
         UPDATE employee_manage
-        SET status = 0, face_url = #{faceUrl}, name = #{name},
-            id_card = #{idCard}, phone = #{phone}, address = #{address}, job_code = #{jobCode}
+        SET face_url = #{faceUrl}, name = #{name}, id_card = #{idCard}, phone = #{phone}, address = #{address}
         WHERE id = #{id}
     </update>
 
     <select id="getEmployeeByPhone" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.EmployeeManage">
-        SELECT * FROM employee_manage WHERE status = 0 AND phone = #{phone} LIMIT 1
+        SELECT em.* FROM employee_manage em
+        LEFT JOIN mer_emp_relation mer ON mer.emp_id = em.id
+        WHERE mer.status = 0 AND em.phone = #{phone} LIMIT 1
     </select>
 
     <update id="bindAppletsPhone">
@@ -58,7 +65,9 @@
     </update>
 
     <select id="getEmployeePage" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.vo.EmployeePageVO">
-        SELECT * FROM employee_manage WHERE status = 0 AND phone = #{phone}
+        SELECT em.* FROM employee_manage em
+        LEFT JOIN mer_emp_relation mer ON mer.emp_id = em.id
+        WHERE mer.status = 0 AND em.phone = #{phone}
     </select>
 
     <select id="getRecordByIdCard" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.InsDayRecord">

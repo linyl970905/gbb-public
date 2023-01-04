@@ -27,6 +27,9 @@ public class DeviceManage implements Serializable {
     // 设备名称
     private String name;
 
+    // 业务员推广码
+    private String promotionCode;
+
     // 是否开启考勤 0-默认关闭 1-开启
     private Integer isPunch;
 

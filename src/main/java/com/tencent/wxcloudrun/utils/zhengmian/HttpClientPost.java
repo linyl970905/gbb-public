@@ -85,8 +85,8 @@ public class HttpClientPost {
 	    		params.put("accessMerchantId", "100053");
 	    		params.put("name", encodeData(name));
 	    		params.put("certNo", encodeData(certNo));
-				String imageContent = imageUrlToBase64(faceUrl);
-				params.put("imageContent", imageContent);
+				//String imageContent = imageUrlToBase64(faceUrl);
+				params.put("imageContent", faceUrl);
 	    		params.put("certSn", encodeData("c3851ade47119121db0c23bfcc7d9c1d"));
 	    		params.put("timestamp", String.valueOf(System.currentTimeMillis()));
 	    		

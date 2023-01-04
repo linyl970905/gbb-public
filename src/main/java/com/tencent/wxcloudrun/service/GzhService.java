@@ -2,6 +2,7 @@ package com.tencent.wxcloudrun.service;
 
 import com.tencent.wxcloudrun.config.ApiResponse;
 import com.tencent.wxcloudrun.model.*;
+import com.tencent.wxcloudrun.vo.EmployeeManageInfo;
 import com.tencent.wxcloudrun.vo.ProvinceCityList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,17 +24,17 @@ public interface GzhService {
 
     ApiResponse createOrder(Order order);
 
-    ApiResponse aliveDevice(String cloudId, String snCode, String name);
+    ApiResponse aliveDevice(String cloudId, String snCode, String name, String promotionCode);
 
     ApiResponse getMerchantByCloudId(String cloudId);
 
     ApiResponse updateMerchantInfo(MerchantManage merchant);
 
-    List<EmployeeManage> getEmployeeList(String cloudId);
+    List<EmployeeManageInfo> getEmployeeList(String cloudId);
 
-    void closeEmpPunch(Integer id, Integer isPunch);
+    void closeEmpPunch(Integer merId, Integer empId, Integer isPunch);
 
-    void closeEmpInsure(Integer id, Integer isInsure);
+    void closeEmpInsure(Integer merId, Integer empId, Integer isInsure);
 
     void delMerEmpRelation(String cloudId, Integer empId);
 

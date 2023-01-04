@@ -7,6 +7,7 @@ import com.tencent.wxcloudrun.model.*;
 import com.tencent.wxcloudrun.service.GzhService;
 import com.tencent.wxcloudrun.utils.OrderNoType;
 import com.tencent.wxcloudrun.vo.CityAreaList;
+import com.tencent.wxcloudrun.vo.EmployeeManageInfo;
 import com.tencent.wxcloudrun.vo.MerchantDetailVO;
 import com.tencent.wxcloudrun.vo.ProvinceCityList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,7 +124,7 @@ public class GzhServiceImpl implements GzhService {
     }
 
     @Override
-    public ApiResponse aliveDevice(String cloudId, String snCode, String name) {
+    public ApiResponse aliveDevice(String cloudId, String snCode, String name, String promotionCode) {
         // 查询该设备是否已激活
         DeviceManage device = gzhMapper.getDeviceBySnCode(snCode);
         if (device != null) {
@@ -131,7 +132,12 @@ public class GzhServiceImpl implements GzhService {
         }
 
         // 创建设备信息，将设备绑定至商户下面
-        DeviceManage addDevice = new DeviceManage().setCloudId(cloudId).setSnCode(snCode).setName(name).setStatus(1);
+        DeviceManage addDevice = new DeviceManage()
+                .setCloudId(cloudId)
+                .setSnCode(snCode)
+                .setName(name)
+                .setPromotionCode(promotionCode)
+                .setStatus(1);
         Integer result = gzhMapper.addDeviceManage(addDevice);
         if (result > 0) {
             return ApiResponse.ok();
@@ -174,18 +180,18 @@ public class GzhServiceImpl implements GzhService {
     }
 
     @Override
-    public List<EmployeeManage> getEmployeeList(String cloudId) {
+    public List<EmployeeManageInfo> getEmployeeList(String cloudId) {
         return gzhMapper.getEmployeeList(cloudId);
     }
 
     @Override
-    public void closeEmpPunch(Integer id, Integer isPunch) {
-        gzhMapper.closeEmpPunch(id, isPunch);
+    public void closeEmpPunch(Integer merId, Integer empId, Integer isPunch) {
+        gzhMapper.closeEmpPunch(merId, empId, isPunch);
     }
 
     @Override
-    public void closeEmpInsure(Integer id, Integer isInsure) {
-        gzhMapper.closeEmpInsure(id, isInsure);
+    public void closeEmpInsure(Integer merId, Integer empId, Integer isInsure) {
+        gzhMapper.closeEmpInsure(merId, empId, isInsure);
     }
 
     @Override

@@ -30,9 +30,6 @@ public class EmpRegisterDTO implements Serializable {
     // 联系地址
     private String address;
 
-    // 工种
-    private String jobCode;
-
 
     // 设备编码
     private String snCode;

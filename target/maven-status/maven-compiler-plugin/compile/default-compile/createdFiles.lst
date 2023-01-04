@@ -42,6 +42,7 @@ com\tencent\wxcloudrun\utils\JsapiTicketUtil.class
 com\tencent\wxcloudrun\utils\zhengmian\HttpClientPost.class
 com\tencent\wxcloudrun\controller\AuthorizeController.class
 com\tencent\wxcloudrun\utils\zhengmian\NameHttpClientPost$1.class
+com\tencent\wxcloudrun\vo\EmployeeManageInfo.class
 com\tencent\wxcloudrun\model\MerchantManage.class
 com\tencent\wxcloudrun\model\City.class
 com\tencent\wxcloudrun\model\DeviceManage.class

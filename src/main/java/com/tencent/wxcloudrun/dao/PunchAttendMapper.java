@@ -25,6 +25,8 @@ public interface PunchAttendMapper {
 
     EmployeeManage getEmployeeById(Integer id);
 
+    MerEmpRelation getMerEmpRelation(@Param("merId") Integer merId, @Param("empId") Integer empId);
+
     Integer getNumByTime(@Param("merId") Integer merId, @Param("empId") Integer empId, @Param("status") Integer status, @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
     void syncPunchStatus(@Param("merId") Integer merId, @Param("empId") Integer empId, @Param("status") Integer status, @Param("startTime") Date startTime, @Param("endTime") Date endTime);

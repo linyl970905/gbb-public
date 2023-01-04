@@ -33,6 +33,10 @@
         SELECT * FROM employee_manage WHERE id = #{id}
     </select>
 
+    <select id="getMerEmpRelation" resultType="com.tencent.wxcloudrun.model.MerEmpRelation">
+        SELECT * FROM mer_emp_relation WHERE status = 0 AND mer_id = #{merId} AND emp_id = #{empId}
+    </select>
+
     <select id="getNumByTime" resultType="java.lang.Integer">
         SELECT count(1) from punch_attend_record
         WHERE mer_id = #{merId} AND emp_id = #{empId} AND status = #{status}

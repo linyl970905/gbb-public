@@ -23,6 +23,11 @@ public class GzhController implements Serializable {
     @Autowired
     private GzhService gzhService;
 
+    /**
+     * 获取请求头信息
+     * @param request
+     * @return
+     */
     @GetMapping("/getRequestHeader")
     public ApiResponse getRequestHeader(HttpServletRequest request) {
         return gzhService.getRequestHeader(request);
@@ -64,8 +69,9 @@ public class GzhController implements Serializable {
      * @return
      */
     @GetMapping("/aliveDevice")
-    public ApiResponse aliveDevice(@RequestParam String cloudId, @RequestParam String snCode, @RequestParam String name) {
-        return gzhService.aliveDevice(cloudId, snCode, name);
+    public ApiResponse aliveDevice(@RequestParam String cloudId, @RequestParam String snCode,
+                                   @RequestParam String name, @RequestParam String promotionCode) {
+        return gzhService.aliveDevice(cloudId, snCode, name, promotionCode);
     }
 
     /**
@@ -100,25 +106,27 @@ public class GzhController implements Serializable {
 
     /**
      * 雇员-关闭考勤
-     * @param id
+     * @param merId
+     * @param empId
      * @param isPunch
      * @return
      */
     @GetMapping("/closeEmpPunch")
-    public ApiResponse closeEmpPunch(@RequestParam Integer id, @RequestParam Integer isPunch) {
-        gzhService.closeEmpPunch(id, isPunch);
+    public ApiResponse closeEmpPunch(@RequestParam Integer merId, @RequestParam Integer empId, @RequestParam Integer isPunch) {
+        gzhService.closeEmpPunch(merId, empId, isPunch);
         return ApiResponse.ok();
     }
 
     /**
      * 雇员-关闭投保
-     * @param id
+     * @param merId
+     * @param empId
      * @param isInsure
      * @return
      */
     @GetMapping("/closeEmpInsure")
-    public ApiResponse closeEmpInsure(@RequestParam Integer id, @RequestParam Integer isInsure) {
-        gzhService.closeEmpInsure(id, isInsure);
+    public ApiResponse closeEmpInsure(@RequestParam Integer merId, @RequestParam Integer empId, @RequestParam Integer isInsure) {
+        gzhService.closeEmpInsure(merId, empId, isInsure);
         return ApiResponse.ok();
     }
 

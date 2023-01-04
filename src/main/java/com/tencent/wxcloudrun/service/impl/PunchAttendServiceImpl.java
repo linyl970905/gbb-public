@@ -57,12 +57,13 @@ public class PunchAttendServiceImpl implements PunchAttendService {
         MerchantManage merchant = punchAttendMapper.getMerchantBySnCode(snCode);
         DeviceManage device = punchAttendMapper.getDeviceBySnCode(snCode);
         EmployeeManage employee = punchAttendMapper.getEmployeeById(Integer.valueOf(userId));
-        if (merchant == null || device == null || employee == null) {
-            return ApiResponse.error("提示：未查询到对应商户/终端设备/雇员信息！");
+        MerEmpRelation relation = punchAttendMapper.getMerEmpRelation(merchant.getId(), employee.getId());
+        if (merchant == null || device == null || employee == null || relation == null) {
+            return ApiResponse.error("提示：未查询到对应商户/终端设备/雇员信息/绑定关系！");
         }
 
         // 3.验证终端设备、人员是否开启考勤功能
-        if (device.getIsPunch() == 0 || employee.getIsPunch() == 0) {
+        if (device.getIsPunch() == 0 || relation.getIsPunch() == 0) {
             return ApiResponse.ok();
         }
 
@@ -84,7 +85,7 @@ public class PunchAttendServiceImpl implements PunchAttendService {
                             .setIdCard(employee.getIdCard())
                             .setPhone(employee.getPhone())
                             .setAddress(employee.getAddress())
-                            .setJobCode(employee.getJobCode())
+                            .setJobCode(relation.getJobCode())
                             .setPunchType(punchType)
                             .setStatus(0)
                             .setCreateTime(nowTime);
@@ -148,7 +149,7 @@ public class PunchAttendServiceImpl implements PunchAttendService {
                             .setIdCard(employee.getIdCard())
                             .setPhone(employee.getPhone())
                             .setAddress(employee.getAddress())
-                            .setJobCode(employee.getJobCode())
+                            .setJobCode(relation.getJobCode())
                             .setPunchType(punchType)
                             .setStatus(0)
                             .setCreateTime(nowTime);
@@ -250,7 +251,7 @@ public class PunchAttendServiceImpl implements PunchAttendService {
                             .setIdCard(employee.getIdCard())
                             .setPhone(employee.getPhone())
                             .setAddress(employee.getAddress())
-                            .setJobCode(employee.getJobCode())
+                            .setJobCode(relation.getJobCode())
                             .setPunchType(punchType)
                             .setStatus(0)
                             .setCreateTime(nowTime);
@@ -432,12 +433,13 @@ public class PunchAttendServiceImpl implements PunchAttendService {
         MerchantManage merchant = punchAttendMapper.getMerchantBySnCode(snCode);
         DeviceManage device = punchAttendMapper.getDeviceBySnCode(snCode);
         EmployeeManage employee = punchAttendMapper.getEmployeeById(Integer.valueOf(userId));
-        if (merchant == null || device == null || employee == null) {
-            return ApiResponse.error("提示：未查询到对应商户/终端设备/雇员信息！");
+        MerEmpRelation relation = punchAttendMapper.getMerEmpRelation(merchant.getId(), employee.getId());
+        if (merchant == null || device == null || employee == null || relation == null) {
+            return ApiResponse.error("提示：未查询到对应商户/终端设备/雇员信息/绑定关系！");
         }
 
         // 3.验证终端设备、人员是否开启投保功能
-        if (device.getIsInsure() == 0 || employee.getIsInsure() == 0) {
+        if (device.getIsInsure() == 0 || relation.getIsInsure() == 0) {
             return ApiResponse.ok();
         }
 
@@ -446,14 +448,14 @@ public class PunchAttendServiceImpl implements PunchAttendService {
         // 5.进行投保操作
         InsDayRecord insDayRecord = punchAttendMapper.getInsDayRecordByIdCard(employee.getIdCard());
         if (insDayRecord == null) {
-            insureOpera(nowTime, snCode, merchant, employee);
+            insureOpera(nowTime, snCode, merchant, employee,relation);
         } else {
             Integer todayNum = punchAttendMapper.getInsDayToday(employee.getIdCard());
             if (todayNum <= 0) {
                 if (nowTime.after(insDayRecord.getStartTime()) && nowTime.before(insDayRecord.getEndTime())) {
-                    insureOpera(insDayRecord.getEndTime(), snCode, merchant, employee);
+                    insureOpera(insDayRecord.getEndTime(), snCode, merchant, employee, relation);
                 } else if (nowTime.after(insDayRecord.getEndTime())) {
-                    insureOpera(nowTime, snCode, merchant, employee);
+                    insureOpera(nowTime, snCode, merchant, employee, relation);
                 }
             }
         }
@@ -469,7 +471,7 @@ public class PunchAttendServiceImpl implements PunchAttendService {
      * @param employee
      * @throws Exception
      */
-    public void insureOpera(Date nowTime, String snCode, MerchantManage merchant, EmployeeManage employee) throws Exception {
+    public void insureOpera(Date nowTime, String snCode, MerchantManage merchant, EmployeeManage employee, MerEmpRelation relation) throws Exception {
         // 时间格式1
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMddHHmmss");
         // 时间格式2
@@ -501,14 +503,14 @@ public class PunchAttendServiceImpl implements PunchAttendService {
         List<Map<String, Object>> requestData = new ArrayList<>();
         Map<String, Object> data = MapUtil.newHashMap();
         data.put("insureId", orderNo);
-        data.put("workPost", employee.getJobCode());
+        data.put("workPost", relation.getJobCode());
         data.put("dutyStation", merchant.getAddress());
         data.put("workTime", sdf2.format(nowTime));
         data.put("insuredNum", 1);
-        data.put("premium", employee.getPlan() == 1 ? 900 : 1800);
-        data.put("amount", employee.getPlan() == 1 ? 50000000 : 80000000);
+        data.put("premium", relation.getPlan() == 1 ? 900 : 1800);
+        data.put("amount", relation.getPlan() == 1 ? 50000000 : 80000000);
         data.put("thirdOrderNo", orderNo);
-        data.put("workType", employee.getJobCode());
+        data.put("workType", relation.getJobCode());
         data.put("clockDate", nowTime);
 
         List<Map<String, Object>> insuredInfo = new ArrayList<>();
@@ -574,8 +576,8 @@ public class PunchAttendServiceImpl implements PunchAttendService {
                         .setIdCard(employee.getIdCard())
                         .setPhone(employee.getPhone())
                         .setAddress(employee.getAddress())
-                        .setJobCode(employee.getJobCode())
-                        .setPlan(employee.getPlan())
+                        .setJobCode(relation.getJobCode())
+                        .setPlan(relation.getPlan())
                         .setStartTime(nowTime)
                         .setEndTime(endTime)
                         .setResponseMsg(respResult)

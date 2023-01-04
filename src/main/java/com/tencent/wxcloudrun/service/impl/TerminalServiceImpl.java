@@ -17,6 +17,7 @@ import com.tencent.wxcloudrun.model.*;
 import com.tencent.wxcloudrun.service.FaceVerifyService;
 import com.tencent.wxcloudrun.service.PunchAttendService;
 import com.tencent.wxcloudrun.service.TerminalService;
+import com.tencent.wxcloudrun.utils.JsapiTicketUtil;
 import com.tencent.wxcloudrun.utils.RSAUtils;
 import com.tencent.wxcloudrun.utils.zhengmian.HttpClientPost;
 import com.tencent.wxcloudrun.vo.EmployeePageVO;
@@ -101,7 +102,7 @@ public class TerminalServiceImpl implements TerminalService {
                     JSONObject parseObj = JSONUtil.parseObj(userList.get(0));
                     String userId = parseObj.getStr("user_id");
                     int score = NumberUtil.parseInt(parseObj.getStr("score"));
-                    if (score >= 85) { // 人脸比对值：85%相似度
+                    if (score >= 80) { // 人脸比对值：85%相似度
                         // 查询该用户绑定的商户
                         Integer checkRelation = terminalMapper.checkRelation(merchant.getId(), Integer.valueOf(userId));
                         if(checkRelation > 0) {
@@ -122,6 +123,9 @@ public class TerminalServiceImpl implements TerminalService {
                         // 创建脸部-雇员信息记录
                         EmployeeManage employee = new EmployeeManage().setFaceUrl(faceUrl);
                         terminalMapper.addEmployeeManage(employee);
+
+                        // 雇员绑定商户(设备)
+                        terminalMapper.addMerEmpRelation(merchant.getId(), employee.getId(), 1);
 
                         // 将设备编码sn_code、人脸id返回给前端进行注册操作
                         Map<String, String> mapData = new HashMap<>();
@@ -165,7 +169,7 @@ public class TerminalServiceImpl implements TerminalService {
                 Integer checkRelation = terminalMapper.checkRelation(merchant.getId(), employee.getId());
                 if (checkRelation <= 0) {
                     // 3.将该设备与员工绑定
-                    terminalMapper.addMerEmpRelation(merchant.getId(), employee.getId());
+                    terminalMapper.addMerEmpRelation(merchant.getId(), employee.getId(), 0);
                 } else {
                     return ResultMsg.respData(302, "用户已注册及绑定，请勿重复操作！", null);
                 }
@@ -175,11 +179,10 @@ public class TerminalServiceImpl implements TerminalService {
                         .setName(name)
                         .setIdCard(idCard)
                         .setPhone(null)
-                        .setAddress(null)
-                        .setJobCode(null);
+                        .setAddress(null);
                 Integer num = terminalMapper.addEmployeeManage(addEmployee);
                 if (num > 0) {
-                    terminalMapper.addMerEmpRelation(merchant.getId(), addEmployee.getId());
+                    terminalMapper.addMerEmpRelation(merchant.getId(), addEmployee.getId(), 0);
                     // 4.上传人脸照片至百度智能云-人脸识别库
                     faceVerifyService.insertFace(employee.getFaceUrl(), addEmployee.getId().toString());
                 }
@@ -230,7 +233,7 @@ public class TerminalServiceImpl implements TerminalService {
                 JSONObject parseObj = JSONUtil.parseObj(userList.get(0));
                 // String userId = parseObj.getStr("user_id");
                 int score = NumberUtil.parseInt(parseObj.getStr("score"));
-                if (score >= 85) {
+                if (score >= 80) {
                     return ApiResponse.error("该人脸照对应的雇员已存在！");
                 } else {
                     return ApiResponse.ok();
@@ -258,14 +261,13 @@ public class TerminalServiceImpl implements TerminalService {
                     .setName(registerDTO.getName())
                     .setIdCard(registerDTO.getIdCard())
                     .setPhone(registerDTO.getPhone())
-                    .setAddress(registerDTO.getAddress())
-                    .setJobCode(registerDTO.getJobCode());
+                    .setAddress(registerDTO.getAddress());
             Integer result = terminalMapper.updateEmployeeManage(employee);
             if (result > 0) {
                 // 3.将该雇员绑定至商户下
                 DeviceManage device = terminalMapper.getDeviceBySnCode(registerDTO.getSnCode());
                 MerchantManage merchant = terminalMapper.getMerchantByCloudId(device.getCloudId());
-                terminalMapper.addMerEmpRelation(merchant.getId(), employee.getId());
+                terminalMapper.updateMerEmpRelation(merchant.getId(), employee.getId(), 0);
                 // 4.上传人脸照片至百度智能云-人脸识别库
                 faceVerifyService.insertFace(employee.getFaceUrl(), employee.getId().toString());
 
@@ -284,8 +286,15 @@ public class TerminalServiceImpl implements TerminalService {
         Map<String, Object> requestBody = MapUtil.newHashMap();
         requestBody.put("code", code);
 
+        // 获取当前access_token
+        String appid="wx8a2aaf3c34eab56b";
+        String appSecret="949e663f7ea974270b0f7ccf4ee6285a";
+        String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + appid + "&secret=" + appSecret + "";
+        String backData = JsapiTicketUtil.sendGet(url, "utf-8", 10000);
+        String accessToken = (String) net.sf.json.JSONObject.fromObject(backData).get("access_token");
+
         // 请求上传文件链接接口
-        HttpRequest httpRequest = HttpRequest.post("https://api.weixin.qq.com/wxa/business/getuserphonenumber");
+        HttpRequest httpRequest = HttpRequest.post("https://api.weixin.qq.com/wxa/business/getuserphonenumber?access_token=" + accessToken);
         httpRequest.contentType("application/json");
         httpRequest.body(JSONUtil.toJsonStr(requestBody));
         httpRequest.setConnectionTimeout(18000);

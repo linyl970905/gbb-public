@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @Author: zero
@@ -22,4 +23,22 @@ public class MerEmpRelation implements Serializable {
 
     // 雇员id
     private Integer empId;
+
+    // 保险方案 1-默认50+5 2-80+8
+    private Integer plan;
+
+    // 工种
+    private String jobCode;
+
+    // 是否考勤 0-默认否 1-是
+    private Integer isPunch;
+
+    // 是否参保 0-默认否 1-是
+    private Integer isInsure;
+
+    // 状态 0-默认正常 1-删除
+    private Integer status;
+
+    // 创建时间
+    private Date createTime;
 }

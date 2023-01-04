@@ -1,6 +1,7 @@
 package com.tencent.wxcloudrun.dao;
 
 import com.tencent.wxcloudrun.model.*;
+import com.tencent.wxcloudrun.vo.EmployeeManageInfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
@@ -35,11 +36,11 @@ public interface GzhMapper {
 
     void updateMerchantInfo(MerchantManage merchant);
 
-    List<EmployeeManage> getEmployeeList(String cloudId);
+    List<EmployeeManageInfo> getEmployeeList(String cloudId);
 
-    void closeEmpPunch(@Param("id") Integer id, @Param("isPunch") Integer isPunch);
+    void closeEmpPunch(@Param("merId") Integer merId, @Param("empId") Integer empId, @Param("isPunch") Integer isPunch);
 
-    void closeEmpInsure(@Param("id") Integer id, @Param("isInsure") Integer isInsure);
+    void closeEmpInsure(@Param("merId") Integer merId, @Param("empId") Integer empId, @Param("isInsure") Integer isInsure);
 
     void delMerEmpRelation(@Param("merId") Integer merId, @Param("empId") Integer empId);
 
