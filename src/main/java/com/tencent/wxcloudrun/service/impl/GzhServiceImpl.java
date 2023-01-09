@@ -195,6 +195,11 @@ public class GzhServiceImpl implements GzhService {
     }
 
     @Override
+    public void updateInsureInfo(Integer merId, Integer empId, String jobCode, Integer plan) {
+        gzhMapper.updateInsureInfo(merId, empId, jobCode, plan);
+    }
+
+    @Override
     public void delMerEmpRelation(String cloudId, Integer empId) {
         MerchantManage merchant = gzhMapper.getMerchantByCloudId(cloudId);
         gzhMapper.delMerEmpRelation(merchant.getId(), empId);

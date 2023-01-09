@@ -9,6 +9,7 @@ import com.tencent.wxcloudrun.model.PunchAttendRecord;
 import com.tencent.wxcloudrun.vo.EmployeePageVO;
 import com.tencent.wxcloudrun.vo.PunchDetailVO;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -46,5 +47,5 @@ public interface TerminalService {
 
     List<PunchAttendRecord> getRecordByTime(Integer merId, Integer empId, String yearMonthDay);
 
-    List<PunchDetailVO> getPunchDetail(Integer merId, Integer empId, String yearMonth);
+    List<PunchDetailVO> getPunchDetail(Integer merId, Integer empId, String yearMonth) throws ParseException;
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
+import java.text.ParseException;
 
 /**
  * @Author: zero
@@ -174,7 +175,7 @@ public class TerminalController implements Serializable {
      * @return
      */
     @GetMapping("/getPunchDetail")
-    public ApiResponse getPunchDetail(@RequestParam Integer merId, @RequestParam Integer empId, @RequestParam String yearMonth) {
+    public ApiResponse getPunchDetail(@RequestParam Integer merId, @RequestParam Integer empId, @RequestParam String yearMonth) throws ParseException {
         return ApiResponse.ok(terminalService.getPunchDetail(merId, empId, yearMonth));
     }
 }

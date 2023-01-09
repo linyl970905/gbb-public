@@ -42,6 +42,8 @@ public interface GzhMapper {
 
     void closeEmpInsure(@Param("merId") Integer merId, @Param("empId") Integer empId, @Param("isInsure") Integer isInsure);
 
+    void updateInsureInfo(@Param("merId") Integer merId, @Param("empId") Integer empId, @Param("jobCode") String jobCode, @Param("plan") Integer plan);
+
     void delMerEmpRelation(@Param("merId") Integer merId, @Param("empId") Integer empId);
 
     List<DeviceManage> getDeviceList(String cloudId);

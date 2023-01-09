@@ -36,6 +36,8 @@ public interface GzhService {
 
     void closeEmpInsure(Integer merId, Integer empId, Integer isInsure);
 
+    void updateInsureInfo(Integer merId, Integer empId, String jobCode, Integer plan);
+
     void delMerEmpRelation(String cloudId, Integer empId);
 
     List<DeviceManage> getDeviceList(String cloudId);

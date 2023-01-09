@@ -52,9 +52,9 @@
 
     <insert id="addPunchAttendRecord" parameterType="com.tencent.wxcloudrun.model.PunchAttendRecord">
         INSERT INTO punch_attend_record
-            (mer_id, emp_id, sn_code, name, id_card, phone, address, job_code, status, create_time)
+            (mer_id, emp_id, sn_code, name, id_card, phone, address, job_code, punch_type, status, create_time)
         VALUES
-            (#{merId}, #{empId}, #{snCode}, #{name}, #{idCard}, #{phone}, #{address}, #{jobCode}, #{status}, #{createTime})
+            (#{merId}, #{empId}, #{snCode}, #{name}, #{idCard}, #{phone}, #{address}, #{jobCode}, #{punchType}, #{status}, #{createTime})
     </insert>
 
     <select id="getInsDayRecordByIdCard" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.InsDayRecord">
@@ -124,32 +124,36 @@
         WHERE mer_id = #{merId}
     </update>
 
-    <select id="getAllDays" resultType="java.lang.Integer">
-        SELECT DATE_FORMAT(create_time, '%Y-%M'), count(1) FROM punch_attend_record
+    <update id="subBalance">
+        UPDATE merchant_manage SET balance = #{balance} WHERE id = #{merId}
+    </update>
+
+    <select id="getAllDays" resultType="com.tencent.wxcloudrun.vo.PuncnVO">
+        SELECT count(1) count FROM punch_attend_record
         WHERE status != 0 AND mer_id = #{merId} AND emp_id = #{empId}
-              AND DATE_FORMAT(create_time, '%Y-%M') = #{yearMonth}
-        GROUP BY DATE_FORMAT(create_time, '%Y-%M')
+              AND DATE_FORMAT(create_time, '%Y-%m') = #{yearMonth}
+        GROUP BY DATE_FORMAT(create_time, '%Y-%m-%d')
     </select>
 
-    <select id="getLateDays" resultType="java.lang.Integer">
-        SELECT DATE_FORMAT(create_time, '%Y-%M'), count(1) FROM punch_attend_record
+    <select id="getLateDays" resultType="com.tencent.wxcloudrun.vo.PuncnVO">
+        SELECT count(1) count FROM punch_attend_record
         WHERE status = 2 AND mer_id = #{merId} AND emp_id = #{empId}
-              AND DATE_FORMAT(create_time, '%Y-%M') = #{yearMonth}
-        GROUP BY DATE_FORMAT(create_time, '%Y-%M')
+              AND DATE_FORMAT(create_time, '%Y-%m') = #{yearMonth}
+        GROUP BY DATE_FORMAT(create_time, '%Y-%m-%d')
     </select>
 
-    <select id="getLeaveEarlyDays" resultType="java.lang.Integer">
-        SELECT DATE_FORMAT(create_time, '%Y-%M'), count(1) FROM punch_attend_record
+    <select id="getLeaveEarlyDays" resultType="com.tencent.wxcloudrun.vo.PuncnVO">
+        SELECT count(1) count FROM punch_attend_record
         WHERE status = 3 AND mer_id = #{merId} AND emp_id = #{empId}
-              AND DATE_FORMAT(create_time, '%Y-%M') = #{yearMonth}
-        GROUP BY DATE_FORMAT(create_time, '%Y-%M')
+              AND DATE_FORMAT(create_time, '%Y-%m') = #{yearMonth}
+        GROUP BY DATE_FORMAT(create_time, '%Y-%m-%d')
     </select>
 
-    <select id="getInsureDays" resultType="java.lang.Integer">
-        SELECT DATE_FORMAT(create_time, '%Y-%M'), count(1) FROM ins_day_record
+    <select id="getInsureDays" resultType="com.tencent.wxcloudrun.vo.PuncnVO">
+        SELECT count(1) count FROM ins_day_record
         WHERE mer_id = #{merId} AND emp_id = #{empId}
-              AND DATE_FORMAT(create_time, '%Y-%M') = #{yearMonth}
-        GROUP BY DATE_FORMAT(create_time, '%Y-%M')
+              AND DATE_FORMAT(create_time, '%Y-%m') = #{yearMonth}
+        GROUP BY DATE_FORMAT(create_time, '%Y-%m-%d')
     </select>
 
     <select id="getExistPunchDate" resultType="date">
@@ -168,5 +172,10 @@
         SELECT * FROM punch_attend_record
         WHERE status != 0 AND mer_id = #{merId} AND emp_id = #{empId}
               AND to_days(create_time) = to_days(#{createTime})
+    </select>
+
+    <select id="getDayRecord" resultType="java.lang.Integer">
+        SELECT count(1) from ins_day_record
+        WHERE emp_id = #{empId} AND to_days(create_time) = to_days(#{createTime})
     </select>
 </mapper>

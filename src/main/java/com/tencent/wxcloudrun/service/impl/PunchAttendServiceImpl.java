@@ -14,10 +14,12 @@ import com.tencent.wxcloudrun.utils.picc.CryptoUtil;
 import com.tencent.wxcloudrun.vo.PunchArrayVO;
 import com.tencent.wxcloudrun.vo.PunchCollectVO;
 import com.tencent.wxcloudrun.vo.PunchDetailVO;
+import com.tencent.wxcloudrun.vo.PuncnVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -46,6 +48,7 @@ public class PunchAttendServiceImpl implements PunchAttendService {
     @Override
     public ApiResponse punchAttend(String snCode, String userId) {
         // 0.当前时间：打卡流程以此时间一致
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
         Date nowTime = new Date();
 
         // 1.数据校验不为空
@@ -53,7 +56,7 @@ public class PunchAttendServiceImpl implements PunchAttendService {
             return ApiResponse.error("提示：打卡必需参数为空！");
         }
 
-        // 2.获取商户信息、终端设备信息、雇员信息
+        // 2.获取商户信息、终端设备信息、雇员信息、关系表信息
         MerchantManage merchant = punchAttendMapper.getMerchantBySnCode(snCode);
         DeviceManage device = punchAttendMapper.getDeviceBySnCode(snCode);
         EmployeeManage employee = punchAttendMapper.getEmployeeById(Integer.valueOf(userId));
@@ -100,6 +103,7 @@ public class PunchAttendServiceImpl implements PunchAttendService {
 
                     if (nowTime.before(oneStartTime)) {
                         record.setStatus(0);
+
                     } else if (nowTime.after(oneStartTime) && nowTime.before(oneNormalTime)) {
                         Integer asNum = punchAttendMapper.getNumByTime(merchant.getId(), employee.getId(), 1, oneStartTime, oneNormalTime);
                         if (asNum > 0) {
@@ -399,7 +403,7 @@ public class PunchAttendServiceImpl implements PunchAttendService {
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         // 获取当前年月日-后期拼接打卡日期
         String subYmd = sdf1.format(nowTime);
-        String jointTime = subYmd + " " + paramTime;
+        String jointTime = subYmd + " " + paramTime + ":00";
         return sdf2.parse(jointTime);
     }
 
@@ -429,7 +433,7 @@ public class PunchAttendServiceImpl implements PunchAttendService {
             return ApiResponse.error("提示：投保必需参数为空！");
         }
 
-        // 2.获取商户信息、终端设备信息、雇员信息
+        // 2.获取商户信息、终端设备信息、雇员信息、关系表信息
         MerchantManage merchant = punchAttendMapper.getMerchantBySnCode(snCode);
         DeviceManage device = punchAttendMapper.getDeviceBySnCode(snCode);
         EmployeeManage employee = punchAttendMapper.getEmployeeById(Integer.valueOf(userId));
@@ -444,6 +448,10 @@ public class PunchAttendServiceImpl implements PunchAttendService {
         }
 
         // 4.验证商户的账户余额是否充足
+        BigDecimal premium = (relation.getPlan() == 1) ? new BigDecimal(1) : new BigDecimal(2);
+        if (merchant.getBalance().compareTo(premium) == -1) {
+            return ApiResponse.error("提示：账户余额不足，请及时充值！");
+        }
 
         // 5.进行投保操作
         InsDayRecord insDayRecord = punchAttendMapper.getInsDayRecordByIdCard(employee.getIdCard());
@@ -459,6 +467,13 @@ public class PunchAttendServiceImpl implements PunchAttendService {
                 }
             }
         }
+
+        // 6.扣除相应保费
+        BigDecimal balance = merchant.getBalance().subtract(premium);
+        punchAttendMapper.subBalance(merchant.getId(), balance);
+
+        // 7.分润
+
 
         return ApiResponse.ok();
     }
@@ -503,7 +518,7 @@ public class PunchAttendServiceImpl implements PunchAttendService {
         List<Map<String, Object>> requestData = new ArrayList<>();
         Map<String, Object> data = MapUtil.newHashMap();
         data.put("insureId", orderNo);
-        data.put("workPost", relation.getJobCode());
+        data.put("workPost", getJobCodeByValue(Integer.valueOf(relation.getJobCode())));
         data.put("dutyStation", merchant.getAddress());
         data.put("workTime", sdf2.format(nowTime));
         data.put("insuredNum", 1);
@@ -588,7 +603,7 @@ public class PunchAttendServiceImpl implements PunchAttendService {
     }
 
     @Override
-    public List<PunchCollectVO> getPunchCollect(String cloudId, String yearMonth) {
+    public List<PunchCollectVO> getPunchCollect(String cloudId, String yearMonth){
         // 0.获取商户管理信息
         MerchantManage merchant = punchAttendMapper.getMerchantByCloudId(cloudId);
 
@@ -599,24 +614,24 @@ public class PunchAttendServiceImpl implements PunchAttendService {
         if (dataList != null && dataList.size() > 0) {
             for (PunchCollectVO vo : dataList) {
                 // 3.获取考勤天数
-                Integer allDays = punchAttendMapper.getAllDays(merchant.getId(), vo.getId(), yearMonth);
-                vo.setAllDays(allDays);
+                List<PuncnVO> allDaysList = punchAttendMapper.getAllDays(merchant.getId(), vo.getId(), yearMonth);
+                vo.setAllDays(allDaysList.size());
                 // 4.获取考勤迟到天数
-                Integer lateDays = punchAttendMapper.getLateDays(merchant.getId(), vo.getId(), yearMonth);
-                vo.setLateDays(lateDays);
+                List<PuncnVO> lateDaysList = punchAttendMapper.getLateDays(merchant.getId(), vo.getId(), yearMonth);
+                vo.setLateDays(lateDaysList.size());
                 // 5.获取考勤早退天数
-                Integer leaveEarlyDays = punchAttendMapper.getLeaveEarlyDays(merchant.getId(), vo.getId(), yearMonth);
-                vo.setLeaveEarlyDays(leaveEarlyDays);
+                List<PuncnVO> leaveEarlyDaysList = punchAttendMapper.getLeaveEarlyDays(merchant.getId(), vo.getId(), yearMonth);
+                vo.setLeaveEarlyDays(leaveEarlyDaysList.size());
                 // 6.获取保险天数
-                Integer insureDays = punchAttendMapper.getInsureDays(merchant.getId(), vo.getId(), yearMonth);
-                vo.setInsureDays(insureDays);
+                List<PuncnVO>  insureDaysList = punchAttendMapper.getInsureDays(merchant.getId(), vo.getId(), yearMonth);
+                vo.setInsureDays(insureDaysList.size());
             }
         }
         return dataList;
     }
 
     @Override
-    public List<PunchDetailVO> getPunchDetail(String cloudId, Integer empId, String yearMonth) {
+    public List<PunchDetailVO> getPunchDetail(String cloudId, Integer empId, String yearMonth){
         // 最终返回的结果集
         List<PunchDetailVO> punchDetailVOList = new ArrayList<>();
 
@@ -624,26 +639,30 @@ public class PunchAttendServiceImpl implements PunchAttendService {
         MerchantManage merchant = punchAttendMapper.getMerchantByCloudId(cloudId);
 
         // 1.获取当月的天数集合
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
-        yearMonth = yearMonth == null ? sdf.format(new Date()) : yearMonth;
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
+        Date nowTime = new Date();
+
+        yearMonth = yearMonth == null ? sdf1.format(nowTime) : yearMonth;
         int days = getMonthDays(yearMonth);
         List<Date> daysList = new ArrayList<>();
         try {
             for (int i = 1; i <= 9; i++) {
-                daysList.add(sdf.parse(yearMonth + "-0" + i));
+                daysList.add(sdf2.parse(yearMonth + "-0" + i));
             }
             for (int i = 10; i <= 28; i++) {
-                daysList.add(sdf.parse(yearMonth + "-" + i));
+                daysList.add(sdf2.parse(yearMonth + "-" + i));
             }
             if (days == 29) {
-                daysList.add(sdf.parse(yearMonth + "-29"));
+                daysList.add(sdf2.parse(yearMonth + "-29"));
             } else if(days == 30) {
-                daysList.add(sdf.parse(yearMonth + "-29"));
-                daysList.add(sdf.parse(yearMonth + "-30"));
+                daysList.add(sdf2.parse(yearMonth + "-29"));
+                daysList.add(sdf2.parse(yearMonth + "-30"));
             } else if (days == 31) {
-                daysList.add(sdf.parse(yearMonth + "-29"));
-                daysList.add(sdf.parse(yearMonth + "-30"));
-                daysList.add(sdf.parse(yearMonth + "-31"));
+                daysList.add(sdf2.parse(yearMonth + "-29"));
+                daysList.add(sdf2.parse(yearMonth + "-30"));
+                daysList.add(sdf2.parse(yearMonth + "-31"));
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -654,6 +673,7 @@ public class PunchAttendServiceImpl implements PunchAttendService {
         for (Date day : daysList) {
             PunchDetailVO punchDetailVO = new PunchDetailVO();
             punchDetailVO.setYearMonthDay(day);
+            // 打卡状态详情
             if (existDateList.contains(day)) {
                 List<PunchArrayVO> arrayList = punchAttendMapper.getPunchArray(merchant.getId(), empId, day);
                 int i = 0;
@@ -667,6 +687,12 @@ public class PunchAttendServiceImpl implements PunchAttendService {
             } else {
                 punchDetailVO.setStatus(0);
                 punchDetailVO.setArrayList(null);
+            }
+            // 投保状态详情
+            punchDetailVO.setIsInsured(0);
+            Integer dayRecord = punchAttendMapper.getDayRecord(empId, day);
+            if (dayRecord > 0) {
+                punchDetailVO.setIsInsured(1);
             }
             punchDetailVOList.add(punchDetailVO);
         }
@@ -688,5 +714,38 @@ public class PunchAttendServiceImpl implements PunchAttendService {
             e.printStackTrace();
         }
         return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+    }
+
+    /**
+     * 获取职业工种
+     * @param value
+     * @return
+     */
+    public static String getJobCodeByValue(Integer value) {
+        String jobCode = "其他";
+        switch (value) {
+            case 1 :
+                jobCode =  "物业管理人员";
+            break;
+            case 2 :
+                jobCode =  "客服人员";
+            break;
+            case 3 :
+                jobCode =  "物业保安";
+                break;
+            case 4 :
+                jobCode =  "物业保洁";
+                break;
+            case 5 :
+                jobCode =  "绿化养护";
+                break;
+            case 6 :
+                jobCode =  "设施维护";
+                break;
+            case 7:
+                jobCode =  "其他";
+                break;
+        }
+        return jobCode;
     }
 }

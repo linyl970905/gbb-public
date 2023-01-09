@@ -15,7 +15,7 @@ import java.util.Date;
 @Accessors(chain = true)
 public class PunchArrayVO implements Serializable {
 
-    // 打卡状态  0-默认 1-按时 2-迟到 3-早退
+    // 打卡状态 0-默认 1-按时 2-迟到 3-早退
     private Integer status;
 
     // 打卡时间

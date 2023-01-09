@@ -23,7 +23,6 @@ import com.tencent.wxcloudrun.utils.zhengmian.HttpClientPost;
 import com.tencent.wxcloudrun.vo.EmployeePageVO;
 import com.tencent.wxcloudrun.vo.PunchArrayVO;
 import com.tencent.wxcloudrun.vo.PunchDetailVO;
-import com.tencent.wxcloudrun.vo.uploadFile.UploadFileVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,7 +101,7 @@ public class TerminalServiceImpl implements TerminalService {
                     JSONObject parseObj = JSONUtil.parseObj(userList.get(0));
                     String userId = parseObj.getStr("user_id");
                     int score = NumberUtil.parseInt(parseObj.getStr("score"));
-                    if (score >= 80) { // 人脸比对值：85%相似度
+                    if (score >= 80) { // 人脸比对值：80%相似度
                         // 查询该用户绑定的商户
                         Integer checkRelation = terminalMapper.checkRelation(merchant.getId(), Integer.valueOf(userId));
                         if(checkRelation > 0) {
@@ -184,7 +183,7 @@ public class TerminalServiceImpl implements TerminalService {
                 if (num > 0) {
                     terminalMapper.addMerEmpRelation(merchant.getId(), addEmployee.getId(), 0);
                     // 4.上传人脸照片至百度智能云-人脸识别库
-                    faceVerifyService.insertFace(employee.getFaceUrl(), addEmployee.getId().toString());
+                    faceVerifyService.insertFace(faceUrl, addEmployee.getId().toString());
                 }
             }
         } catch (Exception e) {
@@ -390,7 +389,7 @@ public class TerminalServiceImpl implements TerminalService {
     }
 
     @Override
-    public List<PunchDetailVO> getPunchDetail(Integer merId, Integer empId, String yearMonth) {
+    public List<PunchDetailVO> getPunchDetail(Integer merId, Integer empId, String yearMonth) throws ParseException {
         // 最终返回的结果集
         List<PunchDetailVO> punchDetailVOList = new ArrayList<>();
 
@@ -421,7 +420,7 @@ public class TerminalServiceImpl implements TerminalService {
         }
 
         // 2.获取当月存在的打卡记录
-        List<Date> existDateList = punchAttendMapper.getExistPunchDate(merId, empId, yearMonth);
+        List<Date> existDateList = punchAttendMapper.getExistPunchDate(merId, empId, sdf.format(yearMonth));
         for (Date day : daysList) {
             PunchDetailVO punchDetailVO = new PunchDetailVO();
             punchDetailVO.setYearMonthDay(day);

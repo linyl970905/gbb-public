@@ -5,9 +5,12 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_ADDRESS}/${MYSQL_DATABASE:gbb_service}
-    username: ${MYSQL_USERNAME}
-    password: ${MySQL_PASSWORD}
+    #url: jdbc:mysql://${MYSQL_ADDRESS}/${MYSQL_DATABASE:gbb_service}
+    #username: ${MYSQL_USERNAME}
+    #password: ${MySQL_PASSWORD}
+    url: jdbc:mysql://sh-cynosdbmysql-grp-l37w8v7a.sql.tencentcdb.com:24803/gbb_service
+    username: root
+    password: t88h9BS6
   mvc:
     view:
       suffix: .html
@@ -17,3 +20,4 @@ mybatis:
   mapper-locations: classpath*:mapper/*Mapper.xml
   configuration:
     map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

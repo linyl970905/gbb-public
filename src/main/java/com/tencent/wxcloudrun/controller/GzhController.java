@@ -131,6 +131,21 @@ public class GzhController implements Serializable {
     }
 
     /**
+     * 雇员-编辑投保信息(工种、方案)
+     * @param merId
+     * @param empId
+     * @param jobCode
+     * @param plan
+     * @return
+     */
+    @GetMapping("/updateInsureInfo")
+    public ApiResponse updateInsureInfo(@RequestParam Integer merId, @RequestParam Integer empId,
+                                        @RequestParam String jobCode, @RequestParam Integer plan) {
+        gzhService.updateInsureInfo(merId, empId, jobCode, plan);
+        return ApiResponse.ok();
+    }
+
+    /**
      * 雇员-删除
      * @param cloudId
      * @param empId

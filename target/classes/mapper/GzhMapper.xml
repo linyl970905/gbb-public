@@ -71,6 +71,11 @@
         UPDATE mer_emp_relation SET is_insure = #{isInsure} WHERE mer_id = #{merId} AND emp_id = #{empId}
     </update>
 
+    <update id="updateInsureInfo">
+        UPDATE mer_emp_relation SET job_code = #{jobCode}, plan = #{plan}
+        WHERE mer_id = #{merId} AND emp_id = #{empId}
+    </update>
+
     <delete id="delMerEmpRelation">
         DELETE * from mer_emp_relation WHERE mer_id = #{merId} AND emp_id = #{empId}
     </delete>
